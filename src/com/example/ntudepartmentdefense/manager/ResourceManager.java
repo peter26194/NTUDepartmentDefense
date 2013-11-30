@@ -357,13 +357,14 @@ public class ResourceManager extends Object {
 			BuildableBitmapTextureAtlas texture 
 				= new BuildableBitmapTextureAtlas(engine.getTextureManager(),576,64 );
 			titleArrowTiledRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(
-					texture, context, "network_background.png", 9 , 1 );
+					texture, context, "arrow_left.png", 9 , 1 );
 			try {
 				texture.build(new BlackPawnTextureAtlasBuilder
 						<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 0));
 			}catch (TextureAtlasBuilderException e) {
 				e.printStackTrace();
 			}
+			texture.load();
 		}
 		
 		// Revert the Asset Path.
