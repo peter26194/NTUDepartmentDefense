@@ -60,6 +60,7 @@ public class ResourceManager extends Object {
 	public static ITextureRegion gameMapTextureRegion;
 	public static ITextureRegion gameWindowTextureRegion;
 	public static ITextureRegion gameLabelTextureRegion;
+	public static ITiledTextureRegion selectedBoxTextureRegion;
 	// ======================== Title Resources ================= //
 	public static ITextureRegion titleLogoTextureRegion;
 	public static ITextureRegion titleBackgroundTextureRegion;
@@ -168,7 +169,19 @@ public class ResourceManager extends Object {
 					texture, context, "window_temp.png", 740, 10);//window.png is 480x800
 			gameLabelTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 					texture, context, "label_temp.png", 1130, 10);//label.png is 64x267
-			
+			texture.load();
+		}
+		if(selectedBoxTextureRegion ==null){
+			BuildableBitmapTextureAtlas texture = new BuildableBitmapTextureAtlas(
+					engine.getTextureManager(), 1280, 1280);
+			selectedBoxTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(
+					texture, context, "selected.png", 4, 1);
+			try {
+				texture.build(new BlackPawnTextureAtlasBuilder
+						<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 0));
+			}catch (TextureAtlasBuilderException e) {
+				e.printStackTrace();
+			}
 			texture.load();
 		}
 		loadTowerTextures();
@@ -341,19 +354,16 @@ public class ResourceManager extends Object {
 		}
 		
 		if ( titleArrowTiledRegion == null ) {
-			
-			
 			BuildableBitmapTextureAtlas texture 
 				= new BuildableBitmapTextureAtlas(engine.getTextureManager(),576,64 );
 			titleArrowTiledRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(
-					texture, context, "arrow_left.png", 9 , 1 );
+					texture, context, "network_background.png", 9 , 1 );
 			try {
 				texture.build(new BlackPawnTextureAtlasBuilder
 						<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 0));
 			}catch (TextureAtlasBuilderException e) {
 				e.printStackTrace();
 			}
-			texture.load();
 		}
 		
 		// Revert the Asset Path.

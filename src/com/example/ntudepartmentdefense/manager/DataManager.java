@@ -12,6 +12,11 @@ public class DataManager {
 	public static DataManager getInstance(){
 		return INSTANCE;
 	}
+	public static final int SLOW_TOWER_RELOAD_ABOVE = 100;
+	public static final int FAST_TOWER_RELOAD_BELOW = 50;
+	
+	public static final int SLOW_MOB_DURATION_ABOVE = 30;
+	public static final int FAST_MOB_DURATION_BELOW = 15;
 	
 	//members
 	

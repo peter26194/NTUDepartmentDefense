@@ -7,7 +7,6 @@ import org.andengine.entity.modifier.MoveByModifier;
 import org.andengine.entity.modifier.MoveModifier;
 import org.andengine.entity.modifier.MoveXModifier;
 import org.andengine.entity.primitive.Rectangle;
-import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
@@ -70,13 +69,13 @@ public class NetworkLayer extends ManagedLayer {
 	private Rectangle background;
 	private Rectangle mainOptionWindow;
 	
-	private Sprite serverOptionWindow;
-	private Sprite serverWaitingWindow;
+	private Rectangle serverOptionWindow;
+	private Rectangle serverWaitingWindow;
 
-	private Sprite clientOptionWindow;
-	private Sprite clientWaitingWindow;
+	private Rectangle clientOptionWindow;
+	private Rectangle clientWaitingWindow;
 	
-	private Sprite guestJoinedWindow;
+	private Rectangle guestJoinedWindow;
 	
 	// Public Methods
 	public NetworkLayer() {
@@ -156,13 +155,12 @@ public class NetworkLayer extends ManagedLayer {
 
 	private void createServerWaitingWindow() {
 		// TODO Auto-generated method stub
-		final float windowHeight = 600f;
-		final float windowWidth  = 800f;
-		serverWaitingWindow = new Sprite( 0f
-				   , 0f
+		final float windowHeight = 300f;
+		final float windowWidth  = 300f;
+		serverWaitingWindow = new Rectangle( ResourceManager.getInstance().cameraWidth / 2 - windowWidth / 2
+			       , ResourceManager.getInstance().cameraHeight /2 - windowHeight / 2
 			       , windowWidth
 			       , windowHeight
-			       , ResourceManager.titleWindowBackTextureRegion
 			       , ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
@@ -172,17 +170,18 @@ public class NetworkLayer extends ManagedLayer {
 					}
 				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 			}
-		};
+		};;
+		serverWaitingWindow.setColor(0f,0f,0f);
 		serverWaitingWindow.setVisible(false);
+		
 
+		Text cancelText = new Text(0, 0, ResourceManager.fontDefault32Bold, 
+				"CANCEL", ResourceManager.getInstance().engine.getVertexBufferObjectManager());
+		cancelText.setColor(255f, 255f, 255f);
 		
 	
-		Sprite cancelButton = new Sprite(  0 
-				                         , 0
-				                         , ResourceManager.titleCancelTextureRegion.getWidth()
-				                         , ResourceManager.titleCancelTextureRegion.getHeight()
-				                         , ResourceManager.titleCancelTextureRegion  
-				                         , ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) {
+		Rectangle cancelButton = new Rectangle(0,0,cancelText.getWidth() , cancelText.getHeight(),  
+				ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				if(pSceneTouchEvent.isActionDown())
@@ -193,15 +192,11 @@ public class NetworkLayer extends ManagedLayer {
 				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 			}
 		};
-		cancelButton.setPosition( serverWaitingWindow.getWidth() /2 - cancelButton.getWidth() / 2,
-				serverWaitingWindow.getHeight() - 2 * cancelButton.getHeight() );
+		cancelButton.setColor(0f, 0f, 0f);
+		cancelButton.attachChild(cancelText);
 		serverWaitingWindow.attachChild(cancelButton);
-
-		serverWaitingWindow.setScale(0.5f, 0.5f);
-		serverWaitingWindow.setPosition(ResourceManager.getInstance().cameraWidth / 2 - serverWaitingWindow.getWidth() / 2
-			       , ResourceManager.getInstance().cameraHeight /2 - serverWaitingWindow.getHeight() / 2) ;
-
-	    
+		cancelButton.setPosition( serverWaitingWindow.getWidth() /2 - cancelButton.getWidth() / 2,
+				serverWaitingWindow.getHeight() - cancelButton.getHeight() );
 		this.registerTouchArea(cancelButton);
 		this.registerTouchArea(serverWaitingWindow);
 		this.attachChild(serverWaitingWindow);
@@ -239,22 +234,26 @@ public class NetworkLayer extends ManagedLayer {
 		final float windowWidth  = 800f;
 		
 		// Window
-		serverOptionWindow = new Sprite( -1* windowWidth
+		serverOptionWindow = new Rectangle( -1* windowWidth
 			       , ResourceManager.getInstance().cameraHeight / 2 - windowHeight/ 2
 			       , windowWidth
 			       , windowHeight
-			       , ResourceManager.titleWindowBackTextureRegion
 			       , ResourceManager.getInstance().engine.getVertexBufferObjectManager() );
 		serverOptionWindow.setVisible(false);
 		
 		
-		// Buttons		
-		Sprite hostButton = new Sprite( 0
-				 					   ,0
-				 					   ,ResourceManager.titleHostGameTextureRegion.getWidth()
-				 					   ,ResourceManager.titleHostGameTextureRegion.getHeight()
-				 					   ,ResourceManager.titleHostGameTextureRegion
-				 					   ,ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) {
+		// Buttons
+		Text hostText = new Text(0, 0, ResourceManager.fontDefault32Bold, 
+				"HOST", ResourceManager.getInstance().engine.getVertexBufferObjectManager());
+		hostText.setColor(255f, 255f, 255f);
+
+		Text cancelText = new Text(0, 0, ResourceManager.fontDefault32Bold, 
+				"CANCEL", ResourceManager.getInstance().engine.getVertexBufferObjectManager());
+		cancelText.setColor(255f, 255f, 255f);
+		
+		
+		Rectangle hostButton = new Rectangle(0,0,hostText.getWidth() , hostText.getHeight(),  
+				ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				if(pSceneTouchEvent.isActionDown())
@@ -269,13 +268,10 @@ public class NetworkLayer extends ManagedLayer {
 				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 			}
 		};
-		
-		Sprite cancelButton = new Sprite( 0
-				   ,0
-				   ,ResourceManager.titleCancelTextureRegion.getWidth()
-				   ,ResourceManager.titleCancelTextureRegion.getHeight()
-				   ,ResourceManager.titleCancelTextureRegion
-				   ,ResourceManager.getInstance().engine.getVertexBufferObjectManager() )  {
+		hostButton.setColor(0f, 0f, 0f);
+		hostButton.attachChild(hostText);
+		Rectangle cancelButton = new Rectangle(0,0,cancelText.getWidth() , cancelText.getHeight(),  
+				ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				if(pSceneTouchEvent.isActionDown())
@@ -285,20 +281,21 @@ public class NetworkLayer extends ManagedLayer {
 				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 			}
 		};
-		hostButton.setPosition( serverOptionWindow.getWidth() *2/ 5 - hostButton.getWidth()/2 ,
-				serverOptionWindow.getHeight() * 11/12 - hostButton.getHeight() );
-		cancelButton.setPosition( serverOptionWindow.getWidth() * 4 / 5 - cancelButton.getWidth() / 2  ,
-				serverOptionWindow.getHeight() * 11/12 - cancelButton.getHeight() );
+		cancelButton.setColor(0f, 0f, 0f);
+		cancelButton.attachChild(cancelText);
 		serverOptionWindow.attachChild(hostButton);
 		serverOptionWindow.attachChild(cancelButton);
-
+		hostButton.setPosition( serverOptionWindow.getWidth() * 0.25f - hostButton.getWidth()/2 ,
+				serverOptionWindow.getHeight() * 11/12 - hostButton.getHeight() );
+		cancelButton.setPosition( serverOptionWindow.getWidth() * 0.75f - cancelButton.getWidth() / 2  ,
+				serverOptionWindow.getHeight() * 11/12 - cancelButton.getHeight() );
 		this.registerTouchArea(hostButton);
 		this.registerTouchArea(cancelButton);
 		
 		// NameString input region
 		serverNameText =  new Text(0, 0, ResourceManager.fontDefault32Bold, 
 				"Name of Host", ResourceManager.getInstance().engine.getVertexBufferObjectManager());
-		serverNameText.setColor(0f, 0f, 0f);
+		serverNameText.setColor(255f, 255f, 255f);
 		Rectangle nameBack = new Rectangle(0,0 , 600 , 80,  
 				ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) {
 			@Override
@@ -322,22 +319,22 @@ public class NetworkLayer extends ManagedLayer {
 				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 			}
 		};
-		nameBack.setAlpha(0f);
+		nameBack.setColor(0f, 0f, 0f);
 		nameBack.attachChild(serverNameText);
 		serverNameText.setPosition( nameBack.getWidth() / 2  - serverNameText.getWidth() / 2,
 								    nameBack.getHeight() / 2 - serverNameText.getHeight() / 2 );
-		serverNameText.setColor(0f, 0f, 0f);
+		
 		serverOptionWindow.attachChild(nameBack);
 		nameBack.setPosition( serverOptionWindow.getWidth() / 2 - nameBack.getWidth() / 2, 
-							  100 - nameBack.getHeight() / 2);
+							  50 - nameBack.getHeight() / 2);
 		this.registerTouchArea(nameBack);
 		
 		
 		// Map Selection
 		
 		serverOptionWindow.attachChild(mapNameBack);
-		mapNameBack.setPosition( serverOptionWindow.getWidth() / 3 - mapNameBack.getWidth() / 2 , 
-							    150 + 50 - mapNameBack.getHeight() / 2);
+		mapNameBack.setPosition( serverOptionWindow.getWidth() / 4 - mapNameBack.getWidth() / 2, 
+							    100 + 50 - mapNameBack.getHeight() / 2);
 	
 		// Department Selection
 
@@ -357,31 +354,31 @@ public class NetworkLayer extends ManagedLayer {
 		// ====== TEST ONLY
 		mapStrings[0] = new Text(0, 0, ResourceManager.fontDefault32Bold, 
 				"MAP00", ResourceManager.getInstance().engine.getVertexBufferObjectManager());
-		mapStrings[0].setColor(0f, 0f, 0f); 
+		mapStrings[0].setColor(255f, 255f, 255f); 
 		mapSprites[0] = new Text(0, 0, ResourceManager.fontDefault32Bold, 
 				"MAP00", ResourceManager.getInstance().engine.getVertexBufferObjectManager());
-		mapSprites[0].setColor(0f, 0f, 0f); 
+		mapSprites[0].setColor(255f, 255f, 255f); 
 		unlockMaps[1] = true;
 		mapStrings[1] = new Text(0, 0, ResourceManager.fontDefault32Bold, 
 				"MAP01", ResourceManager.getInstance().engine.getVertexBufferObjectManager());
-		mapStrings[1].setColor(0f, 0f, 0f); 
+		mapStrings[1].setColor(255f, 255f, 255f); 
 		mapSprites[1] = new Text(0, 0, ResourceManager.fontDefault32Bold, 
 				"MAP01", ResourceManager.getInstance().engine.getVertexBufferObjectManager());
-		mapSprites[1].setColor(0f, 0f, 0f); 
+		mapSprites[1].setColor(255f, 255f, 255f); 
 		unlockMaps[2] = true;
 		mapStrings[2] = new Text(0, 0, ResourceManager.fontDefault32Bold, 
 				"MAP02", ResourceManager.getInstance().engine.getVertexBufferObjectManager());
-		mapStrings[2].setColor(0f, 0f, 0f); 
+		mapStrings[2].setColor(255f, 255f, 255f); 
 		mapSprites[2] = new Text(0, 0, ResourceManager.fontDefault32Bold, 
 				"MAP02", ResourceManager.getInstance().engine.getVertexBufferObjectManager());
-		mapSprites[2].setColor(0f, 0f, 0f); 
+		mapSprites[2].setColor(255f, 255f, 255f); 
 		
 		// ======
 		
 		selectedMapIndex = 0;
 		mapNameBack = new Rectangle(0,0 , 300 , 80,  
 				ResourceManager.getInstance().engine.getVertexBufferObjectManager() );
-		mapNameBack.setAlpha(0f);
+		mapNameBack.setColor(0f, 0f, 0f);
 		for( int i = 0 ; i < MAX_MAP_ID ; i++  ) {
 			if ( !unlockMaps[i] )
 				continue;
@@ -399,12 +396,8 @@ public class NetworkLayer extends ManagedLayer {
 
 		
 
-		AnimatedSprite mapLeftButton = new AnimatedSprite( 0
-														  ,0
-														  ,ResourceManager.titleArrowTiledRegion.getHeight() 
-														  ,ResourceManager.titleArrowTiledRegion.getHeight() 
-														  ,ResourceManager.titleArrowTiledRegion 
-														  ,ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) {
+		Rectangle mapLeftButton = new Rectangle(0,0 , 80 , 80,  
+						ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				if(pSceneTouchEvent.isActionDown())
@@ -415,17 +408,17 @@ public class NetworkLayer extends ManagedLayer {
 			}
 		};
 		
-		mapNameBack.attachChild( mapLeftButton );
-		mapLeftButton.setPosition( mapNameBack.getHeight() / 2 - mapLeftButton.getWidth()  / 2 
-				                 , mapNameBack.getHeight() / 2 - mapLeftButton.getHeight() / 2 );
-		mapLeftButton.animate( 100, true );
+		mapLeftButton.setColor(0f, 0f, 0f);
 		
-		AnimatedSprite mapRightButton = new AnimatedSprite( 0
-				  ,0
-				  ,ResourceManager.titleArrowTiledRegion.getHeight() 
-				  ,ResourceManager.titleArrowTiledRegion.getHeight() 
-				  ,ResourceManager.titleArrowTiledRegion 
-				  ,ResourceManager.getInstance().engine.getVertexBufferObjectManager() ){
+		Text left = new Text(0, 0, ResourceManager.fontDefault32Bold, 
+				"<<", ResourceManager.getInstance().engine.getVertexBufferObjectManager());
+		left.setPosition( mapLeftButton.getWidth()/2  - left.getWidth() / 2 
+						 ,mapLeftButton.getHeight()/2 - left.getHeight() / 2 );
+		mapLeftButton.attachChild( left );
+		mapNameBack.attachChild( mapLeftButton );
+		mapLeftButton.setPosition( 0, mapNameBack.getHeight() / 2 - mapLeftButton.getHeight() / 2 );
+		Rectangle mapRightButton = new Rectangle(0,0 , 80 , 80,  
+				ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				if(pSceneTouchEvent.isActionDown())
@@ -435,11 +428,16 @@ public class NetworkLayer extends ManagedLayer {
 				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 			}
 		};
+		mapRightButton.setColor(0f, 0f, 0f);
+		Text right = new Text(0, 0, ResourceManager.fontDefault32Bold, 
+				">>", ResourceManager.getInstance().engine.getVertexBufferObjectManager());
+		right.setPosition( mapRightButton.getWidth()/2  - right.getWidth() / 2 
+						 ,mapRightButton.getHeight()/2 - right.getHeight() / 2 );
+		mapRightButton.attachChild( right );
 		mapNameBack.attachChild( mapRightButton );
-		mapRightButton.setFlipped(true, false);
-		mapRightButton.setPosition( mapNameBack.getWidth() - mapNameBack.getHeight() / 2 - mapRightButton.getWidth()  / 2 
-				                  , mapNameBack.getHeight() / 2 - mapRightButton.getHeight() / 2 );
-		mapRightButton.animate( 100, true );
+		mapRightButton.setPosition( mapNameBack.getWidth() - mapRightButton.getWidth() 
+				                 , mapNameBack.getHeight() / 2 - mapRightButton.getHeight() / 2 );
+		
 		
 		this.registerTouchArea(mapLeftButton);
 		this.registerTouchArea(mapRightButton);
@@ -470,31 +468,31 @@ public class NetworkLayer extends ManagedLayer {
 		// ====== TEST ONLY
 		departmentStrings[0] = new Text(0, 0, ResourceManager.fontDefault32Bold, 
 				"EE", ResourceManager.getInstance().engine.getVertexBufferObjectManager());
-		departmentStrings[0].setColor(0f, 0f, 0f); 
+		departmentStrings[0].setColor(255f, 255f, 255f); 
 		departmentSprites[0] = new Text(0, 0, ResourceManager.fontDefault32Bold, 
 				"EE", ResourceManager.getInstance().engine.getVertexBufferObjectManager());
-		departmentSprites[0].setColor(0f, 0f, 0f); 
+		departmentSprites[0].setColor(255f, 255f, 255f); 
 		unlockDepartments[1] = true;
 		departmentStrings[1] = new Text(0, 0, ResourceManager.fontDefault32Bold, 
 				"LAW", ResourceManager.getInstance().engine.getVertexBufferObjectManager());
-		departmentStrings[1].setColor(0f, 0f, 0f); 
+		departmentStrings[1].setColor(255f, 255f, 255f); 
 		departmentSprites[1] = new Text(0, 0, ResourceManager.fontDefault32Bold, 
 				"LAW", ResourceManager.getInstance().engine.getVertexBufferObjectManager());
-		departmentSprites[1].setColor(0f, 0f, 0f); 
+		departmentSprites[1].setColor(255f, 255f, 255f); 
 		unlockDepartments[2] = true;
 		departmentStrings[2] = new Text(0, 0, ResourceManager.fontDefault32Bold, 
 				"MED", ResourceManager.getInstance().engine.getVertexBufferObjectManager());
-		departmentStrings[2].setColor(0f, 0f, 0f); 
+		departmentStrings[2].setColor(255f, 255f, 255f); 
 		departmentSprites[2] = new Text(0, 0, ResourceManager.fontDefault32Bold, 
 				"MED", ResourceManager.getInstance().engine.getVertexBufferObjectManager());
-		departmentSprites[2].setColor(0f, 0f, 0f); 
+		departmentSprites[2].setColor(255f, 255f, 255f); 
 		
 		// ======
 		
 		selectedMapIndex = 0;
 		departmentNameBack = new Rectangle(0,0 , 300 , 80,  
 				ResourceManager.getInstance().engine.getVertexBufferObjectManager() );
-		departmentNameBack.setAlpha(0f);
+		departmentNameBack.setColor(0f, 0f, 0f);
 		for( int i = 0 ; i < MAX_DEPARTMENT_ID ; i++  ) {
 			if ( !unlockDepartments[i] )
 				continue;
@@ -512,34 +510,29 @@ public class NetworkLayer extends ManagedLayer {
 
 		
 
-		AnimatedSprite departmentLeftButton = new AnimatedSprite( 0
-														  ,0
-														  ,ResourceManager.titleArrowTiledRegion 
-														  ,ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) {
+		Rectangle departmentLeftButton = new Rectangle(0,0 , 80 , 80,  
+						ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				if(pSceneTouchEvent.isActionDown())
-					if ( status == NETWORK_SERVER || status == NETWORK_CLIENT ) {
+					if ( status == NETWORK_SERVER|| status == NETWORK_CLIENT ) {
 						NetworkLayer.this.onDepartmentArrowTouched(false);
 					}
 				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 			}
 		};
 		
-
-		departmentLeftButton.setPosition( departmentNameBack.getHeight() / 2 - departmentLeftButton.getWidth()  / 2 
-				                 , departmentNameBack.getHeight() / 2 - departmentLeftButton.getHeight() / 2 );
-		departmentLeftButton.animate( 100, true );
-		departmentLeftButton.setVisible(true);
-		departmentLeftButton.setIgnoreUpdate(false);
-		departmentNameBack.attachChild( departmentLeftButton );
+		departmentLeftButton.setColor(0f, 0f, 0f);
 		
-		AnimatedSprite departmentRightButton = new AnimatedSprite( 0
-				  ,0
-				  ,ResourceManager.titleArrowTiledRegion.getHeight() 
-				  ,ResourceManager.titleArrowTiledRegion.getHeight() 
-				  ,ResourceManager.titleArrowTiledRegion 
-				  ,ResourceManager.getInstance().engine.getVertexBufferObjectManager() ){
+		Text left = new Text(0, 0, ResourceManager.fontDefault32Bold, 
+				"<<", ResourceManager.getInstance().engine.getVertexBufferObjectManager());
+		left.setPosition( departmentLeftButton.getWidth()/2  - left.getWidth() / 2 
+						 ,departmentLeftButton.getHeight()/2 - left.getHeight() / 2 );
+		departmentLeftButton.attachChild( left );
+		departmentNameBack.attachChild( departmentLeftButton );
+		departmentLeftButton.setPosition( 0, departmentNameBack.getHeight() / 2 - departmentLeftButton.getHeight() / 2 );
+		Rectangle departmentRightButton = new Rectangle(0,0 , 80 , 80,  
+				ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				if(pSceneTouchEvent.isActionDown())
@@ -549,12 +542,16 @@ public class NetworkLayer extends ManagedLayer {
 				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 			}
 		};
+		departmentRightButton.setColor(0f, 0f, 0f);
+		Text right = new Text(0, 0, ResourceManager.fontDefault32Bold, 
+				">>", ResourceManager.getInstance().engine.getVertexBufferObjectManager());
+		right.setPosition( departmentRightButton.getWidth()/2  - right.getWidth() / 2 
+						 ,departmentRightButton.getHeight()/2 - right.getHeight() / 2 );
+		departmentRightButton.attachChild( right );
 		departmentNameBack.attachChild( departmentRightButton );
-		departmentRightButton.setRotationCenter(departmentRightButton.getWidth()  / 2,  departmentRightButton.getHeight() / 2);
-		departmentRightButton.setRotation(180f);
-		departmentRightButton.setPosition( departmentNameBack.getWidth() - departmentNameBack.getHeight() / 2 - departmentRightButton.getWidth()  / 2 
-				                  , departmentNameBack.getHeight() / 2 - departmentRightButton.getHeight() / 2 );
-		departmentRightButton.animate( 100, true );
+		departmentRightButton.setPosition( departmentNameBack.getWidth() - departmentRightButton.getWidth() 
+				                 , departmentNameBack.getHeight() / 2 - departmentRightButton.getHeight() / 2 );
+		
 		
 		this.registerTouchArea(departmentLeftButton);
 		this.registerTouchArea(departmentRightButton);
@@ -581,8 +578,8 @@ public class NetworkLayer extends ManagedLayer {
 		status = NETWORK_ANIMATING;
 		
 		serverOptionWindow.attachChild(departmentNameBack);
-		departmentNameBack.setPosition( 20 + serverOptionWindow.getWidth() *2 / 3f - departmentNameBack.getWidth() / 2, 
-							    150 + 50 - departmentNameBack.getHeight() / 2);
+		departmentNameBack.setPosition( serverOptionWindow.getWidth() *0.75f - departmentNameBack.getWidth() / 2, 
+							    100 + 50 - departmentNameBack.getHeight() / 2);
 		
 
 		serverOptionWindow.setVisible(true);
@@ -633,19 +630,27 @@ public class NetworkLayer extends ManagedLayer {
 	
 	private void createMainOptionWindow() {
 		// Button Gap
-		final float buttonGap = 25f;
+		final float buttonGap = 100f;
 		// init texts
-		final float windowHeight = ResourceManager.titleHostGameTextureRegion.getHeight();
-		final float windowWidth = ResourceManager.titleHostGameTextureRegion.getWidth() + buttonGap +
-								  ResourceManager.titleJoinGameTextureRegion.getWidth() + buttonGap +
-								  ResourceManager.titleCancelTextureRegion.getWidth();
+		Text hostText = new Text(0, 0, ResourceManager.fontDefault32Bold, 
+				"HOST", ResourceManager.getInstance().engine.getVertexBufferObjectManager());
+		hostText.setColor(255f, 255f, 255f);
+
+		Text joinText = new Text(0, 0, ResourceManager.fontDefault32Bold, 
+				"JOIN", ResourceManager.getInstance().engine.getVertexBufferObjectManager());
+		joinText.setColor(255f, 255f, 255f);
+		
+		Text cancelText = new Text(0, 0, ResourceManager.fontDefault32Bold, 
+				"CANCEL", ResourceManager.getInstance().engine.getVertexBufferObjectManager());
+		cancelText.setColor(255f, 255f, 255f);
+		
+		final float windowHeight = hostText.getHeight();
+		final float windowWidth = hostText.getWidth() + buttonGap +
+								  joinText.getWidth() + buttonGap +
+								  cancelText.getWidth();
 		// init buttons
-		Sprite hostButton = new Sprite( 0
-				 				       ,0
-				 				       ,ResourceManager.titleHostGameTextureRegion.getWidth()  
-				 				       ,windowHeight
-				 				       ,ResourceManager.titleHostGameTextureRegion
-				 				       ,ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) {
+		Rectangle hostButton = new Rectangle(0,0,hostText.getWidth() , windowHeight,  
+				ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				if(pSceneTouchEvent.isActionDown())
@@ -655,13 +660,10 @@ public class NetworkLayer extends ManagedLayer {
 				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 			}
 		};
-
-		Sprite joinButton = new Sprite( 0
-			       ,0
-			       ,ResourceManager.titleJoinGameTextureRegion.getWidth()  
-			       ,windowHeight
-			       ,ResourceManager.titleJoinGameTextureRegion
-			       ,ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) {
+		hostButton.setColor(0f, 0f, 0f);
+		hostButton.attachChild(hostText);
+		Rectangle joinButton = new Rectangle(0,0,joinText.getWidth() , windowHeight,  
+				ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				if(pSceneTouchEvent.isActionDown())
@@ -671,34 +673,35 @@ public class NetworkLayer extends ManagedLayer {
 				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 			}
 		};
-		Sprite cancelButton = new Sprite( 0
-			       ,0
-			       ,ResourceManager.titleCancelTextureRegion.getWidth()  
-			       ,ResourceManager.titleCancelTextureRegion.getHeight()  
-			       ,ResourceManager.titleCancelTextureRegion
-			       ,ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) {
+		joinButton.setColor(0f, 0f, 0f);
+		joinButton.attachChild(joinText);
+		
+		Rectangle cancelButton = new Rectangle(0,0,cancelText.getWidth() , windowHeight,  
+				ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				if(pSceneTouchEvent.isActionDown())
 					if ( status == NETWORK_OPTION ) {
-						SceneManager.getInstance().hideLayer();
+						NetworkLayer.this.onHideOptionWindow();
+						NetworkLayer.this.onHideBackground();
 					}
 				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 			}
 		};
+		cancelButton.setColor(0f, 0f, 0f);
+		cancelButton.attachChild(cancelText);
 		
 		mainOptionWindow = new Rectangle( ResourceManager.getInstance().cameraWidth / 2 - windowWidth / 2
 					       ,-1* windowHeight
 					       ,windowWidth
 					       ,windowHeight
 					       ,ResourceManager.getInstance().engine.getVertexBufferObjectManager() );
-		mainOptionWindow.setAlpha(0f);
 		mainOptionWindow.attachChild(hostButton);
 		mainOptionWindow.attachChild(joinButton);
 		mainOptionWindow.attachChild(cancelButton);
 		hostButton.setPosition(0,0);
 		joinButton.setPosition(buttonGap + hostButton.getWidth(), 0);
-		cancelButton.setPosition( joinButton.getX()+ buttonGap + joinButton.getWidth() , windowHeight / 2 - cancelButton.getHeight()/ 2);
+		cancelButton.setPosition( joinButton.getX()+ buttonGap + joinButton.getWidth() , 0);
 		this.registerTouchArea(hostButton);
 		this.registerTouchArea(joinButton);
 		this.registerTouchArea(cancelButton);
@@ -736,21 +739,24 @@ public class NetworkLayer extends ManagedLayer {
 		// TODO Auto-generated method stub
 		final float windowHeight = 600f;
 		final float windowWidth  = 800f;
-		clientOptionWindow = new Sprite( -1* windowWidth
+		clientOptionWindow = new Rectangle( -1* windowWidth
 			       , ResourceManager.getInstance().cameraHeight / 2 - windowHeight/ 2
 			       , windowWidth
 			       , windowHeight
-			       , ResourceManager.titleWindowBackTextureRegion
 			       , ResourceManager.getInstance().engine.getVertexBufferObjectManager() );
 		clientOptionWindow.setVisible(false);
 		
+		Text joinText = new Text(0, 0, ResourceManager.fontDefault32Bold, 
+				"JOIN", ResourceManager.getInstance().engine.getVertexBufferObjectManager());
+		joinText.setColor(255f, 255f, 255f);
+
+		Text cancelText = new Text(0, 0, ResourceManager.fontDefault32Bold, 
+				"CANCEL", ResourceManager.getInstance().engine.getVertexBufferObjectManager());
+		cancelText.setColor(255f, 255f, 255f);
 		
-		Sprite joinButton = new Sprite(  0
-										,0
-										,ResourceManager.titleJoinGameTextureRegion.getWidth() 
-										,ResourceManager.titleJoinGameTextureRegion.getHeight()
-										,ResourceManager.titleJoinGameTextureRegion
-										,ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) {
+		
+		Rectangle joinButton = new Rectangle(0,0,joinText.getWidth() , joinText.getHeight(),  
+				ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				if(pSceneTouchEvent.isActionDown())
@@ -763,13 +769,10 @@ public class NetworkLayer extends ManagedLayer {
 				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 			}
 		};
-
-		Sprite cancelButton = new Sprite(  0
-				,0
-				,ResourceManager.titleCancelTextureRegion.getWidth() 
-				,ResourceManager.titleCancelTextureRegion.getHeight()
-				,ResourceManager.titleCancelTextureRegion
-				,ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) {
+		joinButton.setColor(0f, 0f, 0f);
+		joinButton.attachChild(joinText);
+		Rectangle cancelButton = new Rectangle(0,0,cancelText.getWidth() , cancelText.getHeight(),  
+				ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				if(pSceneTouchEvent.isActionDown())
@@ -779,7 +782,8 @@ public class NetworkLayer extends ManagedLayer {
 				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 			}
 		};
-
+		cancelButton.setColor(0f, 0f, 0f);
+		cancelButton.attachChild(cancelText);
 		clientOptionWindow.attachChild(joinButton);
 		clientOptionWindow.attachChild(cancelButton);
 
@@ -788,7 +792,7 @@ public class NetworkLayer extends ManagedLayer {
 		// NameString input region
 		clientNameText =  new Text(0, 0, ResourceManager.fontDefault32Bold, 
 				"Name of client", ResourceManager.getInstance().engine.getVertexBufferObjectManager());
-		clientNameText.setColor(0f, 0f, 0f);
+		clientNameText.setColor(255f, 255f, 255f);
 		Rectangle nameBack = new Rectangle(0,0 , 600 , 80,  
 				ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) {
 			@Override
@@ -812,22 +816,22 @@ public class NetworkLayer extends ManagedLayer {
 				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 			}
 		};
-		nameBack.setAlpha(0f);
+		nameBack.setColor(0f, 0f, 0f);
 		nameBack.attachChild(clientNameText);
 		clientNameText.setPosition( nameBack.getWidth() / 2  - clientNameText.getWidth() / 2,
 								    nameBack.getHeight() / 2 - clientNameText.getHeight() / 2 );
 		
 		clientOptionWindow.attachChild(nameBack);
 		nameBack.setPosition( clientOptionWindow.getWidth() / 2 - nameBack.getWidth() / 2, 
-							  75 - nameBack.getHeight() / 2);
+							  50 - nameBack.getHeight() / 2);
 		this.registerTouchArea(nameBack);
 		
 		
 		
 		// IPString input region
 		serverIPText =  new Text(0, 0, ResourceManager.fontDefault32Bold, 
-				"host name to join", ResourceManager.getInstance().engine.getVertexBufferObjectManager());
-		serverIPText.setColor(0f, 0f, 0f);
+				"127.120.120.121", ResourceManager.getInstance().engine.getVertexBufferObjectManager());
+		serverIPText.setColor(255f, 255f, 255f);
 		Rectangle ipBack = new Rectangle(0,0 , 600 , 80,  
 				ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) {
 			@Override
@@ -851,14 +855,14 @@ public class NetworkLayer extends ManagedLayer {
 				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 			}
 		};
-		ipBack.setAlpha(0F);
+		ipBack.setColor(0f, 0f, 0f);
 		ipBack.attachChild(serverIPText);
 		serverIPText.setPosition( ipBack.getWidth() / 2  - serverIPText.getWidth() / 2,
 				                  ipBack.getHeight() / 2 - serverIPText.getHeight() / 2 );
 		
 		clientOptionWindow.attachChild(ipBack);
 		ipBack.setPosition( clientOptionWindow.getWidth() / 2 - ipBack.getWidth() / 2, 
-				nameBack.getY() + nameBack.getHeight()/2 + 75 - ipBack.getHeight() / 2);
+				nameBack.getY() + nameBack.getHeight()/2 + 100 - ipBack.getHeight() / 2);
 		this.registerTouchArea(ipBack);
 		
 		
@@ -867,10 +871,9 @@ public class NetworkLayer extends ManagedLayer {
 		
 		
 		// Reposition
-		joinButton.setScale(0.75f);
-		joinButton.setPosition( clientOptionWindow.getWidth() *2 / 3 - joinButton.getWidth()/2 ,
+		joinButton.setPosition( clientOptionWindow.getWidth() * 0.75f - joinButton.getWidth()/2 ,
 				ipBack.getY() + ipBack.getHeight() / 2 + 175 - joinButton.getHeight() / 2 );
-		cancelButton.setPosition( clientOptionWindow.getWidth() *2 / 3 - cancelButton.getWidth() / 2  ,
+		cancelButton.setPosition( clientOptionWindow.getWidth() * 0.75f - cancelButton.getWidth() / 2  ,
 				joinButton.getY() + joinButton.getHeight() / 2 + 150 - cancelButton.getHeight() / 2 );
 		this.registerTouchArea(joinButton);
 		this.registerTouchArea(cancelButton);
@@ -898,7 +901,7 @@ public class NetworkLayer extends ManagedLayer {
 		
 		status = NETWORK_ANIMATING;
 		clientOptionWindow.attachChild(departmentNameBack);
-		departmentNameBack.setPosition( clientOptionWindow.getWidth() /3 - departmentNameBack.getWidth() / 2, 
+		departmentNameBack.setPosition( clientOptionWindow.getWidth() *0.25f - departmentNameBack.getWidth() / 2, 
 							   250 - departmentNameBack.getHeight() / 2);
 	
 		clientOptionWindow.setVisible(true);
@@ -938,14 +941,13 @@ public class NetworkLayer extends ManagedLayer {
 
 	private void createClientWaitingWindow() {
 		// TODO Auto-generated method stub
-		final float windowHeight = 600f;
-		final float windowWidth  = 800f;
-		clientWaitingWindow = new Sprite( 0
-										 ,0
-										 ,windowWidth
-										 ,windowHeight
-										 ,ResourceManager.titleWindowBackTextureRegion
-										 ,ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) {
+		final float windowHeight = 300f;
+		final float windowWidth  = 300f;
+		clientWaitingWindow = new Rectangle( ResourceManager.getInstance().cameraWidth / 2 - windowWidth / 2
+			       , ResourceManager.getInstance().cameraHeight /2 - windowHeight / 2
+			       , windowWidth
+			       , windowHeight
+			       , ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				if(pSceneTouchEvent.isActionDown())
@@ -955,15 +957,17 @@ public class NetworkLayer extends ManagedLayer {
 				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 			}
 		};
+		clientWaitingWindow.setColor(0f,0f,0f);
 		clientWaitingWindow.setVisible(false);
 		
+
+		Text cancelText = new Text(0, 0, ResourceManager.fontDefault32Bold, 
+				"CANCEL", ResourceManager.getInstance().engine.getVertexBufferObjectManager());
+		cancelText.setColor(255f, 255f, 255f);
+		
 	
-		Sprite cancelButton = new Sprite(0
-										,0
-										,ResourceManager.titleCancelTextureRegion.getWidth() 
-										,ResourceManager.titleCancelTextureRegion.getHeight()
-										,ResourceManager.titleCancelTextureRegion
-										,ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) {
+		Rectangle cancelButton = new Rectangle(0,0,cancelText.getWidth() , cancelText.getHeight(),  
+				ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				if(pSceneTouchEvent.isActionDown())
@@ -974,14 +978,14 @@ public class NetworkLayer extends ManagedLayer {
 				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 			}
 		};
+		cancelButton.setColor(0f, 0f, 0f);
+		cancelButton.attachChild(cancelText);
 		clientWaitingWindow.attachChild(cancelButton);
 		cancelButton.setPosition( clientWaitingWindow.getWidth() /2 - cancelButton.getWidth() / 2,
-				clientWaitingWindow.getHeight() - 2* cancelButton.getHeight() );
-		
-		clientWaitingWindow.setScale(0.5f);
-		clientWaitingWindow.setPosition(ResourceManager.getInstance().cameraWidth / 2 - clientWaitingWindow.getWidth() / 2
-			       , ResourceManager.getInstance().cameraHeight /2 - clientWaitingWindow.getHeight() / 2);
+				clientWaitingWindow.getHeight() - cancelButton.getHeight() );
 		this.registerTouchArea(cancelButton);
+		
+	
 		this.registerTouchArea(clientWaitingWindow);
 		this.attachChild(clientWaitingWindow);
 		
@@ -1013,15 +1017,15 @@ public class NetworkLayer extends ManagedLayer {
 	}
 	private void createGuestJoinedWindow() {
 		// TODO Auto-generated method stub
-		final float windowHeight = 600f;
-		final float windowWidth  = 800f;
-		guestJoinedWindow = new Sprite(  0
-									   , 0
-									   , windowWidth
-									   , windowHeight
-									   , ResourceManager.titleWindowBackTextureRegion
-									   , ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) ;
+		final float windowHeight = 300f;
+		final float windowWidth  = 300f;
+		guestJoinedWindow = new Rectangle( ResourceManager.getInstance().cameraWidth / 2 - windowWidth / 2
+			       , ResourceManager.getInstance().cameraHeight /2 - windowHeight / 2
+			       , windowWidth
+			       , windowHeight
+			       , ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) ;
 		
+		guestJoinedWindow.setColor(0f,0f,0f);
 		guestJoinedWindow.setVisible(false);
 		
 		guestNameText =  new Text(0, 0, ResourceManager.fontDefault32Bold, 
@@ -1033,13 +1037,13 @@ public class NetworkLayer extends ManagedLayer {
 		guestNameText.setPosition( guestJoinedWindow.getWidth()  / 2 - guestNameText.getWidth() / 2 
 								  ,guestJoinedWindow.getHeight() / 4 - guestNameText.getHeight()/ 2);
 		
+		Text acceptText = new Text(0, 0, ResourceManager.fontDefault32Bold, 
+				"ACCEPT", ResourceManager.getInstance().engine.getVertexBufferObjectManager());
+		acceptText.setColor(255f, 255f, 255f);
+		
 	
-		Sprite acceptButton = new Sprite(0
-										,0
-										,ResourceManager.titleHostGameTextureRegion.getWidth()//titleAcceptTextureRegion.getWidth()
-										,ResourceManager.titleHostGameTextureRegion.getHeight()//titleAcceptTextureRegion.getHeight()
-										,ResourceManager.titleHostGameTextureRegion//titleAcceptTextureRegion
-										,ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) {
+		Rectangle acceptButton = new Rectangle(0,0,acceptText.getWidth() , acceptText.getHeight(),  
+				ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				if(pSceneTouchEvent.isActionDown())
@@ -1050,20 +1054,23 @@ public class NetworkLayer extends ManagedLayer {
 				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 			}
 		};
-
+		acceptButton.setColor(0f, 0f, 0f);
+		acceptButton.attachChild(acceptText);
 		guestJoinedWindow.attachChild(acceptButton);
 		acceptButton.setPosition( guestJoinedWindow.getWidth() / 2 - acceptButton.getWidth() / 2,
 				guestJoinedWindow.getHeight() /2 - acceptButton.getHeight() /2);
 		this.registerTouchArea(acceptButton);
 		
 		
+		
+		
+		Text cancelText = new Text(0, 0, ResourceManager.fontDefault32Bold, 
+				"REJECT", ResourceManager.getInstance().engine.getVertexBufferObjectManager());
+		cancelText.setColor(255f, 255f, 255f);
+		
 	
-		Sprite cancelButton = new Sprite(0
-										,0
-										,ResourceManager.titleCancelTextureRegion.getWidth()//titleRejectTextureRegion.getWidth()
-										,ResourceManager.titleCancelTextureRegion.getHeight()//RejectTextureRegion.getHeight()
-										,ResourceManager.titleCancelTextureRegion //titleRejectTextureRegion
-										,ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) {
+		Rectangle cancelButton = new Rectangle(0,0,cancelText.getWidth() , cancelText.getHeight(),  
+				ResourceManager.getInstance().engine.getVertexBufferObjectManager() ) {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				if(pSceneTouchEvent.isActionDown())
@@ -1074,15 +1081,11 @@ public class NetworkLayer extends ManagedLayer {
 				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 			}
 		};
+		cancelButton.setColor(0f, 0f, 0f);
+		cancelButton.attachChild(cancelText);
 		guestJoinedWindow.attachChild(cancelButton);
 		cancelButton.setPosition( guestJoinedWindow.getWidth() / 2 - cancelButton.getWidth() / 2,
 				guestJoinedWindow.getHeight() *3/4- cancelButton.getHeight() /2);
-		
-		guestJoinedWindow.setScale(0.75f);
-		guestJoinedWindow.setPosition(ResourceManager.getInstance().cameraWidth / 2 - guestJoinedWindow.getWidth() / 2
-	       , ResourceManager.getInstance().cameraHeight /2 - guestJoinedWindow.getHeight() / 2);
-		
-		
 		this.registerTouchArea(cancelButton);
 		this.attachChild(guestJoinedWindow);
 		

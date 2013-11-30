@@ -10,14 +10,17 @@ import com.example.ntudepartmentdefense.manager.ResourceManager;
 
 
 public class LeftWindow extends Entity{
+	private GameWindow gameWindow;
+	
 	// The objects that will make up our left Info Window
 	private Sprite backgroundSprite;
 	private Text titleText;
 	private Text moneyText;
 	private InfoWindow info;
 	
-	LeftWindow(){
+	LeftWindow(GameWindow gameWindow){
 		super(0, 0);
+		this.gameWindow = gameWindow;
 		
 		//create background
 		backgroundSprite = new Sprite(0,0, ResourceManager.gameWindowTextureRegion,
@@ -40,15 +43,16 @@ public class LeftWindow extends Entity{
 		GameManager.getInstance().setMoneyText(moneyText); //linked to GameManager
 		
 		//create a info panel
-		info = new InfoWindow();
-		
-	}
-	
-	public void displayInfo(){
-		//TODO
+		info = new InfoWindow(0, backgroundSprite.getHeight()/2,
+				backgroundSprite.getWidth(), backgroundSprite.getHeight()/2);
+		this.attachChild(info);
 	}
 	
 	public float getWidth(){
 		return backgroundSprite.getWidth();
+	}
+	
+	public InfoWindow getInfoWindow(){
+		return info;
 	}
 }

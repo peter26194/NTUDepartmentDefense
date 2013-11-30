@@ -8,6 +8,8 @@ import com.example.ntudepartmentdefense.manager.NetworkManager;
 
 
 public class Notebook extends Entity{
+	private GameWindow gameWindow;
+	
 	// The objects that will make up our Notebook
 	private Tab[] tabs;
 	private Tab buildTab;
@@ -17,14 +19,15 @@ public class Notebook extends Entity{
 		private static final int SKILL_TAB = 1;
 		private static final int TECHTREE_TAB = 2;
 	
-	Notebook(final float x, final float y, float width){
+	Notebook(final float x, final float y, float width, GameWindow gameWindow){
 		super(x, y);
+		this.gameWindow = gameWindow;
 		
 		int myDepartment = NetworkManager.getInstance().getDepartmentID();
 		tabs = new Tab[3];
-		tabs[BUILD_TAB] = new Tab(1, width, DataManager.getInstance().towerParam[myDepartment], this);
-		tabs[SKILL_TAB] = new Tab(2, width, DataManager.getInstance().towerParam[myDepartment+1]/*TODO*/, this);
-		tabs[TECHTREE_TAB] = new Tab(3, width, DataManager.getInstance().towerParam[myDepartment]/*TODO*/, this);
+		tabs[BUILD_TAB] = new BuildTab(0, width, DataManager.getInstance().towerParam[myDepartment], gameWindow);
+		tabs[SKILL_TAB] = new SkillTab(1, width, DataManager.getInstance().towerParam[myDepartment]/*TODO*/, gameWindow);
+		tabs[TECHTREE_TAB] = new TechtreeTab(2, width, DataManager.getInstance().towerParam[myDepartment]/*TODO*/, gameWindow);
 		
 		for(int i=0; i<3; i++) 
 			this.attachChild(tabs[i]);
@@ -32,9 +35,9 @@ public class Notebook extends Entity{
 	}
 	public void display(int index){
 		for(int i=0; i<3; i++)
-			tabs[i].setVisible(false);
+			tabs[i].getPageContent().setVisible(false);
 		
-		getChildByTag(index).setVisible(true);
+		tabs[index].getPageContent().setVisible(true);
 	}
 	public Tab getTab(int i){
 		 return tabs[i];
