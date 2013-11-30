@@ -1,9 +1,12 @@
 package com.example.ntudepartmentdefense.scene;
 
 
+import org.andengine.entity.modifier.AlphaModifier;
+import org.andengine.entity.modifier.ColorModifier;
 import org.andengine.entity.modifier.FadeInModifier;
 import org.andengine.entity.modifier.MoveByModifier;
 import org.andengine.entity.modifier.ParallelEntityModifier;
+import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
@@ -54,7 +57,7 @@ public class TitleScene extends ManagedScene {
 	private ButtonSprite SinglePlayerButton;
 	private ButtonSprite MultiPlayerButton;
 	private ButtonSprite OptionsButton;
-	private Text TitleText;
+	private Sprite Logo;
 	
 	@Override
 	public void onLoadScene() {
@@ -67,11 +70,16 @@ public class TitleScene extends ManagedScene {
 		this.createTitle();
 	}
 	private void createTitle() {
-		TitleText = new Text(0, 0, ResourceManager.fontDefault72Bold, "TITLE", ResourceManager.getInstance().engine.getVertexBufferObjectManager());
-		TitleText.setHorizontalAlign ( HorizontalAlign.CENTER );
-		TitleText.setPosition((ResourceManager.getInstance().cameraWidth)/2 - TitleText.getWidth() / 2 , (ResourceManager.getInstance().cameraHeight*2)/3f - TitleText.getHeight() / 2);
-		TitleText.setColor(0.153f, 0.290f, 0.455f);
-		this.attachChild(TitleText);
+		Logo = new Sprite(0,0, ResourceManager.titleLogoTextureRegion , ResourceManager.getInstance().engine.getVertexBufferObjectManager());
+		Logo.setPosition((ResourceManager.getInstance().cameraWidth) * 3/4 - Logo.getWidth() / 2 
+				       ,  ResourceManager.getInstance().cameraHeight /5    - Logo.getHeight() / 2);
+		Logo.setAlpha(0f);
+		Logo.setColor(0.7f,0.7f,0.7f);
+		AlphaModifier am = new AlphaModifier(1f, 0f, 1f);
+		ColorModifier cm = new ColorModifier(1f, 0.7f,1f, 0.7f,1f, 0.7f,1f);
+		SequenceEntityModifier sem = new SequenceEntityModifier( am, cm );
+		Logo.registerEntityModifier(sem);
+		this.attachChild(Logo);
 	}
 	private void createOptionsButton() {
 		OptionsButton = new ButtonSprite(
