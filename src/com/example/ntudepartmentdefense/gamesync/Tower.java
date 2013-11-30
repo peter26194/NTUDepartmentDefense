@@ -1,13 +1,6 @@
 package com.example.ntudepartmentdefense.gamesync;
 
-
-import org.andengine.entity.sprite.AnimatedSprite;
-import org.andengine.entity.sprite.Sprite;
-import org.andengine.entity.sprite.TiledSprite;
-import org.andengine.opengl.texture.region.ITextureRegion;
-import org.andengine.opengl.texture.region.ITiledTextureRegion;
-import org.andengine.opengl.texture.region.TiledTextureRegion;
-import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.input.touch.TouchEvent;
 
 import com.example.ntudepartmentdefense.manager.DataManager;
 import com.example.ntudepartmentdefense.manager.NetworkManager;
@@ -16,7 +9,7 @@ import com.example.ntudepartmentdefense.util.Gauge;
 
 
 
-public class Tower extends AnimatedSprite{
+public class Tower extends GameSprite{
 	protected TowerLayer towerLayer;
 	protected BulletLayer bulletLayer;
 	
@@ -57,8 +50,7 @@ public class Tower extends AnimatedSprite{
 			int towerID, int departmentID,
 			boolean isServer, TowerLayer towerLayer, BulletLayer bulletLayer) {
 		super( gridX * edgeUnit, gridY * edgeUnit, edgeUnit, edgeUnit, 
-				DataManager.getInstance().towerParam[departmentID][towerID].getTextureRegion(),
-				ResourceManager.getInstance().engine.getVertexBufferObjectManager());
+				DataManager.getInstance().towerParam[departmentID][towerID].getTextureRegion());
 		this.gridX = new short[1];
 		this.gridX[0] = gridX;
 		this.gridY = new short[1];
@@ -93,8 +85,15 @@ public class Tower extends AnimatedSprite{
 		}
 		this.attachChild(progressBar);
 		this.setChildrenIgnoreUpdate(false);
+		towerLayer.getGameSync().getGameScene().registerTouchArea(this);
 	}
-	
+	@Override
+	public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+		if(pSceneTouchEvent.isActionDown()){
+			towerLayer.getGameSync().getGameScene().GameHud.getLeftWindow().getInfoWindow().displayInfoOf(this);
+		}
+		return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+	}
 	public void remove(){
 		status = TOWER_REMOVE;
 		progressBar.setVisible(true);
@@ -106,6 +105,12 @@ public class Tower extends AnimatedSprite{
 	}
 	public short[] getYs(){
 		return gridY;
+	}
+	public int getDepartmentID(){
+		return this.departmentID;
+	}
+	public int getTowerID(){
+		return this.towerID;
 	}
 	public boolean canAttack(Mob target){
 		if ( !target.isLive() )

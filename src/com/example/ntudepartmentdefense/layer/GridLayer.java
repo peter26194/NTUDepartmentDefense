@@ -75,7 +75,7 @@ public class GridLayer extends ManagedLayer{
 					short[] gridXY = xy2gridXY(pTouchAreaLocalX, pTouchAreaLocalY);
 					selectedGrid.setPosition(edgeUnit*gridXY[0], edgeUnit*gridXY[1]);
 					if( gameSync.canBuild(gridXY[0], gridXY[1]) ){
-						NetworkManager.getInstance().cmdBuild((short)0, gridXY[0], gridXY[1] );//TODO towerID
+						NetworkManager.getInstance().cmdBuild((short)gameSync.getGameScene().GameHud.getRightWindow().getTab(0).getPageContent().getSelected(), gridXY[0], gridXY[1] );
 					}else{
 						selectedGrid.setColor(1f, 0f, 0f, 1f);
 						//TODO some feedback
@@ -134,6 +134,6 @@ public class GridLayer extends ManagedLayer{
 	}
 	@Override
 	public void onUnloadLayer() {
-
+		
 	}
 }

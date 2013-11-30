@@ -2,6 +2,7 @@ package com.example.ntudepartmentdefense.gamesync;
 
 
 import org.andengine.entity.sprite.AnimatedSprite;
+import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
@@ -13,7 +14,7 @@ import com.example.ntudepartmentdefense.util.Gauge;
 
 
 
-public class Mob extends AnimatedSprite{
+public class Mob extends GameSprite{
 	private MobLayer mobLayer;
 	private static final float edgeLength = ResourceManager.getInstance().edgeLength;
 	private static final short edgeUnitCount= ResourceManager.getInstance().edgeUnitCount;
@@ -42,9 +43,8 @@ public class Mob extends AnimatedSprite{
 	//PUBLIC METHODS
 	public Mob(int mobID, short gridX, short gridY, int typeID, 
 			boolean isServer, MobLayer mobLayer){
-		super(gridX * edgeUnit, gridY * edgeUnit, DataManager.getInstance().mobParam[typeID].getTextureRegion(), 
-				ResourceManager.getInstance().engine.getVertexBufferObjectManager());
-		//TODO this.setScaleX();
+		super(gridX * edgeUnit, gridY * edgeUnit, 
+				DataManager.getInstance().mobParam[typeID].getTextureRegion());
 		setGridPosition( gridX , gridY);
 		this.mobID = mobID;
 		this.gridX = gridX;
@@ -72,12 +72,8 @@ public class Mob extends AnimatedSprite{
 		this.setVisible(true);
 		this.setIgnoreUpdate(false);
 		this.walk();
+		mobLayer.getGameSync().getGameScene().registerTouchArea(this);
 	}
-	//hit by bullet
-	public void hitBy(Bullet bullet){
-		this.hpMinus((short)(bullet.getDamage() - this.defense));
-	}
-	
 	//getters
 	public short getGridX(){
 		return this.gridX;
@@ -85,9 +81,20 @@ public class Mob extends AnimatedSprite{
 	public short getGridY(){
 		return this.gridY;
 	}
+	public int getMobType(){
+		return this.typeID;
+	}
+	public int getCurrentHP(){
+		return this.curHp;
+	}
 	public int getID(){
 		return this.mobID;
 	}
+	//hit by bullet
+	public void hitBy(Bullet bullet){
+		this.hpMinus((short)(bullet.getDamage() - this.defense));
+	}
+	
 	public boolean ownedByServer() {
 		return ownedByServer;
 	}
@@ -140,7 +147,13 @@ public class Mob extends AnimatedSprite{
 		}
 		super.onManagedUpdate(pSecondsElapsed);
 	}
-	
+	@Override
+	public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+		if(pSceneTouchEvent.isActionDown()){
+			mobLayer.getGameSync().getGameScene().GameHud.getLeftWindow().getInfoWindow().displayInfoOf(this);
+		}
+		return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+	}
 	public boolean isLive() {
 		return curHp > 0;
 	}

@@ -240,7 +240,7 @@ public class NetworkManager {
 		}
 	}
 	public synchronized void cmdBuild( short towerID, short x , short y ) {
-		sendLocalCommand( obtainBuildCommand(towerID, x,y));
+		sendLocalCommand( obtainBuildCommand( towerID, x,y ) );
 	}
 	public synchronized void increaseTurn( ) {
 		if ( connection == IS_HOST || connection == IS_SINGLE) 

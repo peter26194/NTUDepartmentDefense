@@ -17,7 +17,7 @@ public class GameScene extends ManagedScene {
 	// Create an easy to manage HUD that we can attach/detach when the game scene is shown or hidden.
 	public GameWindow GameHud = new GameWindow(this);
 	public GameScene thisManagedGameScene = this;
-	public GameSync gameSync = new GameSync();
+	public GameSync gameSync = new GameSync(this);
 	public boolean started = false;
 	public GameScene() {
 		// Let the Scene Manager know that we want to show a Loading Scene for at least 2 seconds.
@@ -39,7 +39,7 @@ public class GameScene extends ManagedScene {
 	}
 	
 	public void onGameStart() { 
-		started =true;
+		started = true;
 	}
 	
 	// These objects will make up our loading scene.

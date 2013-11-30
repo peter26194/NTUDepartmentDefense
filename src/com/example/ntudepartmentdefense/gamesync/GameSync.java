@@ -12,11 +12,11 @@ import com.example.ntudepartmentdefense.layer.GridLayer;
 import com.example.ntudepartmentdefense.manager.GameManager;
 import com.example.ntudepartmentdefense.manager.NetworkManager;
 import com.example.ntudepartmentdefense.manager.ResourceManager;
+import com.example.ntudepartmentdefense.scene.GameScene;
 import com.example.ntudepartmentdefense.util.Command;
 
-
-
 public class GameSync extends Entity{
+	private GameScene gameScene;
 	
 	// ============== Constants ============== 
 
@@ -72,8 +72,9 @@ public class GameSync extends Entity{
 	// ============== Constructor ================
 	
 	
-	public GameSync() {
+	public GameSync(GameScene gameScene) {
 		super(0, 0);
+		this.gameScene = gameScene;
 		this.setChildrenIgnoreUpdate(false);
 		
 		hostTuple[TOWER_LAYER]  = new TowerLayer( this  );
@@ -464,6 +465,10 @@ public class GameSync extends Entity{
 		// TODO Auto-generated method stub
 		NetworkManager.getInstance().sendTurnDownMessage();
 
+	}
+	
+	public GameScene getGameScene(){
+		return gameScene;
 	}
 
 }
