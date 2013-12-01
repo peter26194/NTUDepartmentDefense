@@ -62,6 +62,11 @@ public class ResourceManager extends Object {
 	public static ITextureRegion gameWindowTextureRegion;
 	public static ITextureRegion gameLabelTextureRegion;
 	public static ITiledTextureRegion selectedBoxTextureRegion;
+	public static ITextureRegion gameLevelUpTextureRegion;//TODO
+	public static ITextureRegion gameRemoveTextureRegion;
+	public static ITextureRegion gameFocusTextureRegion;
+	
+	
 	// ======================== Title Resources ================= //
 	public static ITextureRegion titleLogoTextureRegion;
 	public static ITextureRegion titleBackgroundTextureRegion;

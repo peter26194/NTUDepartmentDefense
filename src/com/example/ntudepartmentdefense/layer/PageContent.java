@@ -73,7 +73,6 @@ public class PageContent extends Sprite{
 		return buttons;
 	}
 	
-	
 	private void select(ButtonSprite button){
 		ResourceManager.getInstance().moveCenter(
 				ResourceManager.getInstance().getCenterX(button), 

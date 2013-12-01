@@ -7,10 +7,10 @@ import java.io.IOException;
 public class Command {
 	public static final short CMD_BUILD       = 1;//
 	public static final short CMD_REMOVE      = 2;//
-	public static final short CMD_LEVEL       = 3;//
+	public static final short CMD_LEVEL_UP    = 3;//
 	public static final short CMD_SKILL       = 4;//
 	public static final short CMD_UNLOCK_TREE = 5;//
-	public static final short CMD_TARGET      = 6;//
+	public static final short CMD_FOCUS       = 6;//
 	private short mType = -1;
 	private short mID = -1;
 	private short mX = -1 ;

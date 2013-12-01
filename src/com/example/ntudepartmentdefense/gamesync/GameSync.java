@@ -66,7 +66,7 @@ public class GameSync extends Entity{
 	private Queue<Integer> mobIDPool = new LinkedList<Integer>();
 	private Set<Integer> mobIDs   = new HashSet<Integer>();
 	private static Mob[] mobList = new Mob[ MAX_MOB_ID ];
-
+	private Mob focusedMob;
 	// Turn Management
 	private int updatesLeft = 0;//how many updates left in current turn
 	
@@ -201,7 +201,6 @@ public class GameSync extends Entity{
 			return true;
 		}
 	}
-
 	// Mob Set-up
 	public short getDirection( short x, short y , boolean isServer) {
 		// TODO
@@ -437,7 +436,7 @@ public class GameSync extends Entity{
 			return;
 		short departmentID = ( isServer) ?getServerDepartment() : getClientDepartment();
 		while( !queue.isEmpty() ) {
-			Command cmd = queue.remove();
+			final Command cmd = queue.remove();
 			short type = cmd.getType();
 			switch( type ) {
 			case Command.CMD_BUILD:
@@ -475,10 +474,48 @@ public class GameSync extends Entity{
 					}
 				}
 				break;
+			case Command.CMD_REMOVE:
+				synchronized ( syncLock ) {
+					this.blocksOrUnblocks(towerMap[cmd.getY()][cmd.getX()].getXs(), 
+							towerMap[cmd.getY()][cmd.getX()].getYs(), false);
+					towerMap[cmd.getY()][cmd.getX()].setVisible(false);
+					ResourceManager.getInstance().context.runOnUpdateThread( new Runnable() {
+						@Override
+						public void run() {
+							GameSync.this.towerMap[cmd.getY()][cmd.getX()].detachSelf();
+						}
+					});
+					towerMap[cmd.getY()][cmd.getX()] = null;
+				}
+				break;
+			case Command.CMD_LEVEL_UP:
+				synchronized ( syncLock ) {
+					Tower upperLevelTower = towerMap[cmd.getY()][cmd.getX()].upperLevelTower();
+					
+					towerMap[cmd.getY()][cmd.getX()].setVisible(false);
+					
+					
+					ResourceManager.getInstance().context.runOnUpdateThread( new Runnable() {
+						@Override
+						public void run() {
+							GameSync.this.towerMap[cmd.getY()][cmd.getX()].detachSelf();
+						}
+					});
+					towerMap[cmd.getY()][cmd.getX()] = upperLevelTower;
+				}
+				break;
+			case Command.CMD_FOCUS:
+				synchronized ( syncLock ) {
+					if (mobList[cmd.getID()] != null){
+						focusedMob = mobList[cmd.getID()];
+					}else{
+						focusedMob = null;
+					}
+				}
+				break;
 			default:
 				break;
 			}
-
 			NetworkManager.recycleCommand(cmd);
 		}
 	}
@@ -496,6 +533,13 @@ public class GameSync extends Entity{
 	
 	public GameScene getGameScene(){
 		return gameScene;
+	}
+
+	public Mob getFocusedMob() {
+		return focusedMob;
+	}
+	public void UnsetFocusedMob() {
+		focusedMob = null;
 	}
 
 }

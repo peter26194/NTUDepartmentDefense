@@ -44,7 +44,7 @@ public class LeftWindow extends Entity{
 		
 		//create a info panel
 		info = new InfoWindow(0, backgroundSprite.getHeight()/2,
-				backgroundSprite.getWidth(), backgroundSprite.getHeight()/2);
+				backgroundSprite.getWidth(), backgroundSprite.getHeight()/2, gameWindow);
 		this.attachChild(info);
 	}
 	
