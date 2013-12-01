@@ -11,6 +11,7 @@ import com.example.ntudepartmentdefense.manager.GameManager;
 import com.example.ntudepartmentdefense.manager.NetworkManager;
 import com.example.ntudepartmentdefense.manager.ResourceManager;
 import com.example.ntudepartmentdefense.util.Gauge;
+import com.example.ntudepartmentdefense.util.MobStage;
 
 
 
@@ -39,10 +40,13 @@ public class Mob extends GameSprite{
 	private int defense;
 	private int curHp;
 	private int maxHp;
+	private int money;
+	private int damage;
+	private boolean refresh = false;
 	private Gauge hpBar;
 	//PUBLIC METHODS
 	public Mob(int mobID, short gridX, short gridY, int typeID, 
-			boolean isServer, MobLayer mobLayer){
+			boolean isServer, MobLayer mobLayer, int wave){
 		super(gridX * edgeUnit, gridY * edgeUnit, 
 				DataManager.getInstance().mobParam[typeID].getTextureRegion());
 		setGridPosition( gridX , gridY);
@@ -59,9 +63,10 @@ public class Mob extends GameSprite{
 		
 		//set parameters by DataManager
 		this.duration = DataManager.getInstance().mobParam[typeID].getDuration();
-		this.defense = DataManager.getInstance().mobParam[typeID].getDefense();
-		this.maxHp = DataManager.getInstance().mobParam[typeID].getMaxHP();
-		
+		this.defense = 0;
+		this.maxHp = wave * wave;
+		this.money = wave;
+		this.damage = 1;
 		this.movingDist = this.edgeUnit/this.duration;
 		curHp = maxHp;
 		String color = ( isServer)? NetworkManager.SERVER_COLOR : NetworkManager.CLIENT_COLOR;
@@ -132,6 +137,12 @@ public class Mob extends GameSprite{
 		if(this.movingCount >= this.duration){
 			this.mobLayer.getGameSync().mobUnlock(this.gridX, this.gridY);
 			
+			if (refresh ) {
+				curHp += ( 1 + maxHp / 20 );
+				if (curHp>= maxHp) 
+					curHp = maxHp;
+				hpBar.setRatio((float)this.curHp / (float)this.maxHp);
+			}
 			short[] target = this.targetGrid();
 			this.gridX = target[0];
 			this.gridY = target[1];
@@ -173,9 +184,10 @@ public class Mob extends GameSprite{
 	private void onDead(){
 		//add money if this mob is not mine
 		if (! ownedByServer)
-			GameManager.getInstance().addMoney(1);
+			GameManager.getInstance().addMoney(money);
 		
 		curHp = 0;
+		refresh = false;
 		this.mobLayer.getGameSync().mobUnlock(this.gridX, this.gridY);
 		
 		short[] target = this.targetGrid();
@@ -234,6 +246,52 @@ public class Mob extends GameSprite{
 			//do nothing
 			break;
 		}
+	}
+	public void attachTags(short[] currentTags) {
+		// TODO Auto-generated method stub
+		if (currentTags == null )
+			return;
+		for ( short t : currentTags ) {
+			switch(t) {
+			case MobStage.TAG_CROWDED:
+				money *= 3;
+				money /= 4;
+				if ( money == 0 )
+					money++;
+				break;
+			case MobStage.TAG_BOSS:
+				maxHp *= 5;
+				curHp = maxHp;
+				damage += 10;
+				defense += 1;
+				break;
+			case MobStage.TAG_TRINITY:
+				maxHp += maxHp / 2 + maxHp * 3;
+				curHp = maxHp;
+				damage += 6;
+				break;
+			case MobStage.TAG_BULKY:
+				curHp = maxHp *= 2;
+				defense++;
+				damage++;
+				duration*=2;
+				money*= 2;
+				break;
+			case MobStage.TAG_LETHAL:
+				damage+= 10;
+				break;
+			case MobStage.TAG_REFRESH:
+				refresh = true;
+				break;
+			case MobStage.TAG_WEALTHY:
+				money += money/2;
+				break;
+			case MobStage.TAG_FAST:
+				duration -= duration / 4;
+				break;
+			}
+		}
+
 	}
 	
 }

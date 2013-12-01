@@ -5,12 +5,11 @@ public class MobParam extends IconParam{
 	private int defense;
 	private int maxHp;
 	
-	public MobParam(int duration, int defense, int hp, String img){
+	public MobParam(int duration, String img){
 		super(img);
 		
 		this.duration= duration;
-		this.defense = defense;
-		this.maxHp = hp;
+
 	}
 	
 	//getters
