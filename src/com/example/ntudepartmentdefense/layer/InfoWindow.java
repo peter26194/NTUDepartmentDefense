@@ -86,7 +86,7 @@ public class InfoWindow extends Entity{
 			public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 				Tower tower = (Tower) selectedBox.getParent();
 				if (GameManager.getInstance().getMoney() >= 
-						DataManager.getInstance().towerParam[tower.getDepartmentID()][tower.getTowerID()].getLevelUpCost())
+						DataManager.getInstance().towerParam[tower.getDepartmentID()][tower.getTowerID()].getBuildCost())
 					NetworkManager.getInstance().cmdLevelUp(tower.getXs()[0], tower.getYs()[0]);
 			}
 		});
