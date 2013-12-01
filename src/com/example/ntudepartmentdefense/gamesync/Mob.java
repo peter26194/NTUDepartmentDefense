@@ -188,6 +188,9 @@ public class Mob extends GameSprite{
 		
 		curHp = 0;
 		refresh = false;
+		if ( this.mobLayer.getGameSync().getFocusedMob() == this ) {
+			this.mobLayer.getGameSync().unsetFocusedMob();
+		}
 		this.mobLayer.getGameSync().mobUnlock(this.gridX, this.gridY);
 		
 		short[] target = this.targetGrid();
