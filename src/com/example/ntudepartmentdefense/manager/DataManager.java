@@ -51,7 +51,7 @@ public class DataManager {
 	//mob
 	public MobParam[] mobParam = new MobParam[] {
 		//MobParam(int duration, int defense, int hp, String img)
-		new MobParam(15, 0, 10, "shared/mobs/high_school_girl.png"), //typeID == 0
+		new MobParam(15,  "shared/mobs/high_school_girl.png"), //typeID == 0
 	};
 	
 	//bullet
