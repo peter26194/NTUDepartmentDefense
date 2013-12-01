@@ -134,7 +134,7 @@ public class NetworkManager {
 		return commandPool.obtainCommand(Command.CMD_REMOVE, (short)-1, x, y);
 	}
 	public static Command obtainFocusCommand( int mobID ) {
-		return commandPool.obtainCommand(Command.CMD_FOCUS, mobID,(short)-1, (short)-1);
+		return commandPool.obtainCommand(Command.CMD_FOCUS, (short)mobID,(short)-1, (short)-1);
 	}
 
 	public static Command obtainCommand() {
