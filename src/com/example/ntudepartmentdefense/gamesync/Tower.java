@@ -8,7 +8,6 @@ import com.example.ntudepartmentdefense.manager.ResourceManager;
 import com.example.ntudepartmentdefense.util.Gauge;
 
 
-
 public class Tower extends GameSprite{
 	protected TowerLayer towerLayer;
 	protected BulletLayer bulletLayer;
@@ -21,9 +20,9 @@ public class Tower extends GameSprite{
 		return true;
 	}
 	
-	protected boolean ownedByServer = false;
-	public boolean ownedByServer() {
-		return ownedByServer;
+	protected boolean isHost = false;
+	public boolean isHost() {
+		return isHost;
 	}
 	protected int status;
 	protected static final int TOWER_IDLE = 0;
@@ -48,7 +47,7 @@ public class Tower extends GameSprite{
 	//PROTECTED METHODS
 	public Tower(short gridX, short gridY, 
 			int towerID, int departmentID,
-			boolean isServer, TowerLayer towerLayer, BulletLayer bulletLayer) {
+			boolean isHost, TowerLayer towerLayer, BulletLayer bulletLayer) {
 		super( gridX * edgeUnit, gridY * edgeUnit, edgeUnit, edgeUnit, 
 				DataManager.getInstance().towerParam[departmentID][towerID].getTextureRegion());
 		this.gridX = new short[1];
@@ -69,10 +68,10 @@ public class Tower extends GameSprite{
 		this.removeCD = DataManager.getInstance().towerParam[departmentID][towerID].getRemoveCD();
 		
 		this.currentCD = 0;
-		this.ownedByServer = isServer;
+		this.isHost = isHost;
 		this.towerLayer = towerLayer;
 		this.bulletLayer = bulletLayer;
-		String color = ( isServer)? NetworkManager.SERVER_COLOR : NetworkManager.CLIENT_COLOR;
+		String color = ( isHost)? NetworkManager.SERVER_COLOR : NetworkManager.CLIENT_COLOR;
 		progressBar = new Gauge((int)edgeUnit, (int)edgeUnit / 10, color, "#333333", 0f);
 		progressBar.setPosition( 0f ,  edgeUnit - edgeUnit / 10);
 		
@@ -91,11 +90,8 @@ public class Tower extends GameSprite{
 		towerLayer.getGameSync().getGameScene().registerTouchArea(this);
 	}
 	@Override
-	public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-		if(pSceneTouchEvent.isActionDown()){
-			towerLayer.getGameSync().getGameScene().GameHud.getLeftWindow().getInfoWindow().displayInfoOf(this);
-		}
-		return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+	protected void displayInfo(){
+		towerLayer.getGameSync().getGameScene().GameHud.getLeftWindow().getInfoWindow().displayInfoOf(this);
 	}
 	public void remove(){
 		status = TOWER_REMOVE;
@@ -120,7 +116,7 @@ public class Tower extends GameSprite{
 			return false;
 		if ( target == null)
 			return false;
-		if ( !( target.ownedByServer ^ this.ownedByServer) )
+		if ( !( target.ownedByServer ^ this.isHost) )
 			return false;
 		float dist = ResourceManager.getInstance().dist(this.getX(), this.getY(), 
 				target.getX(), target.getY());
@@ -157,6 +153,9 @@ public class Tower extends GameSprite{
 			if ( reloadCD == 0 ) 
 				return;
 			// short circuit
+			if (towerLayer.getGameSync().getFocusedMob() != null){
+				target = towerLayer.getGameSync().getFocusedMob();
+			}
 			if (target == null || !canAttack(target) ) 
 				findTarget();
 			if (target != null) 
@@ -172,6 +171,12 @@ public class Tower extends GameSprite{
 			break;
 		}
 		super.onManagedUpdate(pSecondsElapsed);
+	}
+	public Tower upperLevelTower(){
+		Tower upper = new Tower(gridX[0], gridY[0], 
+					towerID, departmentID,
+					isHost, towerLayer, bulletLayer);
+		return upper;
 	}
 	//PRIVATE METHODS
 	private void findTarget(){

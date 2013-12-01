@@ -6,8 +6,10 @@ public class TowerParam extends IconParam{
 	private int reloadCD;
 	private int buildCD;
 	private int removeCD;
+	private int upperLevelTower;//-1 if no upper-level tower
+	private int levelUpCost;//-1 if no upper-level tower
 	
-	public TowerParam(float range, int bullet, int reloadCD, int bulidCD, int removeCD, String img){
+	public TowerParam(float range, int bullet, int reloadCD, int bulidCD, int removeCD, int upperLevelTower, int levelUpCost, String img){
 		super(img);
 		
 		this.range = range;
@@ -15,6 +17,9 @@ public class TowerParam extends IconParam{
 		this.reloadCD = reloadCD;
 		this.buildCD = bulidCD;
 		this.removeCD = removeCD;
+		
+		this.upperLevelTower = upperLevelTower;
+		this.levelUpCost = levelUpCost;
 	}
 	
 	//getters
@@ -33,5 +38,10 @@ public class TowerParam extends IconParam{
 	public int getRemoveCD(){
 		return removeCD;
 	}
-	
+	public int getUpperLevelTower(){
+		return upperLevelTower;
+	}
+	public int getLevelUpCost(){
+		return levelUpCost;
+	}
 }

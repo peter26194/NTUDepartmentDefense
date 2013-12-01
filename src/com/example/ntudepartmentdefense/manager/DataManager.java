@@ -24,13 +24,13 @@ public class DataManager {
 	//tower
 	public TowerParam[] eeTowerParam = new TowerParam[] {
 		//TowerParam(float range, int bullet, int reloadCD, int bulidCD, int removeCD, String img)
-		new TowerParam(0f, 0, 0, 900, 0, "ee/towers/castle_ee.png"), //towerID == 0
-		new TowerParam(3.5f, 0, 30, 120, 240, "shared/towers/fence.png"), //towerID == 1
+		new TowerParam(0f, 0, 0, 900, 0, -1, -1, "ee/towers/castle_ee.png"), //towerID == 0
+		new TowerParam(3.5f, 0, 30, 120, 240, -1, -1, "shared/towers/fence.png"), //towerID == 1
 	};
 	public TowerParam[] medTowerParam = new TowerParam[] {
 		//TowerParam(float range, int bullet, int reloadCD, int bulidCD, int removeCD, String img)
-		new TowerParam(0f, 0, 0, 900, 0, "med/towers/castle_med.png"), //towerID == 0
-		new TowerParam(3.5f, 0, 30, 120, 240, "shared/towers/fence.png"), //towerID == 1
+		new TowerParam(0f, 0, 0, 900, 0, -1, -1, "med/towers/castle_med.png"), //towerID == 0
+		new TowerParam(3.5f, 0, 30, 120, 240, -1, -1, "shared/towers/fence.png"), //towerID == 1
 	};
 	public TowerParam[][] towerParam = new TowerParam[][] {
 		eeTowerParam, //departmentID == 0
