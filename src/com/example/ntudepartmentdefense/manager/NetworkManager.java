@@ -127,6 +127,16 @@ public class NetworkManager {
 	public static Command obtainBuildCommand( short towerID, short x , short y) {
 		return commandPool.obtainCommand( Command.CMD_BUILD, towerID, x, y);
 	}
+	public static Command obtainLevelUpCommand( short x , short y ){
+		return commandPool.obtainCommand(Command.CMD_LEVEL_UP, (short)-1, x, y);
+	}
+	public static Command obtainRemoveCommand( short x , short y ){
+		return commandPool.obtainCommand(Command.CMD_REMOVE, (short)-1, x, y);
+	}
+	public static Command obtainFocusCommand( int mobID ) {
+		return commandPool.obtainCommand(Command.CMD_FOCUS, mobID,(short)-1, (short)-1);
+	}
+
 	public static Command obtainCommand() {
 		final short i = -1;
 		return commandPool.obtainCommand(i,i,i,i);
@@ -241,6 +251,15 @@ public class NetworkManager {
 	}
 	public synchronized void cmdBuild( short towerID, short x , short y ) {
 		sendLocalCommand( obtainBuildCommand( towerID, x,y ) );
+	}
+	public synchronized void cmdLevelUp( short x , short y ) {
+		sendLocalCommand( obtainLevelUpCommand( x,y ) );
+	}
+	public synchronized void cmdRemove( short x , short y ) {
+		sendLocalCommand( obtainRemoveCommand( x,y ) );
+	}
+	public synchronized void cmdFocus( int mobID ) {
+		sendLocalCommand( obtainFocusCommand( mobID ) );
 	}
 	public synchronized void increaseTurn( ) {
 		if ( connection == IS_HOST || connection == IS_SINGLE) 
