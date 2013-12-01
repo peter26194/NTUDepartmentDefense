@@ -62,10 +62,9 @@ public class ResourceManager extends Object {
 	public static ITextureRegion gameWindowTextureRegion;
 	public static ITextureRegion gameLabelTextureRegion;
 	public static ITiledTextureRegion selectedBoxTextureRegion;
-	public static ITextureRegion gameLevelUpTextureRegion;//TODO
+	public static ITextureRegion gameLevelUpTextureRegion;
 	public static ITextureRegion gameRemoveTextureRegion;
 	public static ITextureRegion gameFocusTextureRegion;
-	
 	
 	// ======================== Title Resources ================= //
 	public static ITextureRegion titleLogoTextureRegion;
@@ -177,6 +176,26 @@ public class ResourceManager extends Object {
 					texture, context, "label_temp.png", 1130, 10);//label.png is 64x267
 			texture.load();
 		}
+		if(gameLevelUpTextureRegion ==null
+				|| gameRemoveTextureRegion==null
+				|| gameFocusTextureRegion==null){
+			BuildableBitmapTextureAtlas texture = new BuildableBitmapTextureAtlas(
+					engine.getTextureManager(), 1280, 1280);
+			gameLevelUpTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+					texture, context, "button_level_up.png");
+			gameRemoveTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+					texture, context, "button_remove.png");
+			gameFocusTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+					texture, context, "button_focus.png");
+			try {
+				texture.build(new BlackPawnTextureAtlasBuilder
+						<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 0));
+			}catch (TextureAtlasBuilderException e) {
+				e.printStackTrace();
+			}
+			texture.load();
+		}
+		
 		if(selectedBoxTextureRegion ==null){
 			BuildableBitmapTextureAtlas texture = new BuildableBitmapTextureAtlas(
 					engine.getTextureManager(), 1280, 1280);
@@ -278,6 +297,36 @@ public class ResourceManager extends Object {
 			if(gameMapTextureRegion.getTexture().isLoadedToHardware()) {
 				gameMapTextureRegion.getTexture().unload();
 				gameMapTextureRegion = null;
+			}
+		}
+		if(gameLabelTextureRegion!=null) {
+			if(gameLabelTextureRegion.getTexture().isLoadedToHardware()) {
+				gameLabelTextureRegion.getTexture().unload();
+				gameLabelTextureRegion = null;
+			}
+		}
+		if(selectedBoxTextureRegion!=null) {
+			if(selectedBoxTextureRegion.getTexture().isLoadedToHardware()) {
+				selectedBoxTextureRegion.getTexture().unload();
+				selectedBoxTextureRegion = null;
+			}
+		}
+		if(gameLevelUpTextureRegion!=null) {
+			if(gameLevelUpTextureRegion.getTexture().isLoadedToHardware()) {
+				gameLevelUpTextureRegion.getTexture().unload();
+				gameLevelUpTextureRegion = null;
+			}
+		}
+		if(gameRemoveTextureRegion!=null) {
+			if(gameRemoveTextureRegion.getTexture().isLoadedToHardware()) {
+				gameRemoveTextureRegion.getTexture().unload();
+				gameRemoveTextureRegion = null;
+			}
+		}
+		if(gameFocusTextureRegion!=null) {
+			if(gameFocusTextureRegion.getTexture().isLoadedToHardware()) {
+				gameFocusTextureRegion.getTexture().unload();
+				gameFocusTextureRegion = null;
 			}
 		}
 		unloadTowerTextures();
