@@ -9,11 +9,13 @@ import java.util.Set;
 import org.andengine.entity.Entity;
 
 import com.example.ntudepartmentdefense.layer.GridLayer;
+import com.example.ntudepartmentdefense.manager.DataManager;
 import com.example.ntudepartmentdefense.manager.GameManager;
 import com.example.ntudepartmentdefense.manager.NetworkManager;
 import com.example.ntudepartmentdefense.manager.ResourceManager;
 import com.example.ntudepartmentdefense.scene.GameScene;
 import com.example.ntudepartmentdefense.util.Command;
+import com.example.ntudepartmentdefense.util.Position;
 
 public class GameSync extends Entity{
 	private GameScene gameScene;
@@ -441,14 +443,37 @@ public class GameSync extends Entity{
 			switch( type ) {
 			case Command.CMD_BUILD:
 				TowerLayer tlayer = (isServer) ? (TowerLayer) hostTuple [ TOWER_LAYER ]
-											  : (TowerLayer) guestTuple[ TOWER_LAYER ];
+						: (TowerLayer) guestTuple[ TOWER_LAYER ];
 				BulletLayer blayer= (isServer) ? (BulletLayer) hostTuple [ BULLET_LAYER ]
-											   : (BulletLayer) guestTuple[ BULLET_LAYER ];
-				build( new Tower( cmd.getX() , cmd.getY()
-						         ,cmd.getID(), departmentID
-						         ,isServer
-						         ,tlayer, blayer) 
-				      ,isServer);
+						: (BulletLayer) guestTuple[ BULLET_LAYER ];
+				if (cmd.getID()!=0){
+					build( new Tower( cmd.getX() , cmd.getY()
+							,cmd.getID(), departmentID
+							,isServer
+							,tlayer, blayer) 
+					,isServer);
+				}else{//if building a castle
+					build( new Tower( cmd.getX() , cmd.getY()
+							,cmd.getID(), departmentID
+							,isServer
+							,tlayer, blayer) 
+					,isServer);
+
+					Position pos = new Position(DataManager.getInstance().castlePosition[departmentID].x, 
+							DataManager.getInstance().castlePosition[departmentID].y);
+
+					for(int i=0; i<pos.x.length; i++){
+						pos.x[i] = (short) (cmd.getX()+pos.x[i]);
+						pos.y[i] = (short) (cmd.getY()+pos.y[i]);
+					}
+					synchronized ( syncLock ) {
+						//blocks castle area except castle exit
+						this.blocksOrUnblocks(pos.x, pos.y, true);
+
+						//unblocks castle exit
+						this.blocksOrUnblocks(new short[]{cmd.getX()}, new short[]{cmd.getY()}, false);
+					}
+				}
 				break;
 			default:
 				break;

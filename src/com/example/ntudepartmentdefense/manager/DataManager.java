@@ -2,6 +2,7 @@ package com.example.ntudepartmentdefense.manager;
 
 import com.example.ntudepartmentdefense.util.BulletParam;
 import com.example.ntudepartmentdefense.util.MobParam;
+import com.example.ntudepartmentdefense.util.Position;
 import com.example.ntudepartmentdefense.util.TowerParam;
 
 public class DataManager {
@@ -21,7 +22,6 @@ public class DataManager {
 	//members
 	
 	//tower
-	//private
 	public TowerParam[] eeTowerParam = new TowerParam[] {
 		//TowerParam(float range, int bullet, int reloadCD, int bulidCD, int removeCD, String img)
 		new TowerParam(0f, 0, 0, 900, 0, "ee/towers/castle_ee.png"), //towerID == 0
@@ -32,13 +32,22 @@ public class DataManager {
 		new TowerParam(0f, 0, 0, 900, 0, "med/towers/castle_med.png"), //towerID == 0
 		new TowerParam(3.5f, 0, 30, 120, 240, "shared/towers/fence.png"), //towerID == 1
 	};
-	
-	//public
 	public TowerParam[][] towerParam = new TowerParam[][] {
 		eeTowerParam, //departmentID == 0
 		medTowerParam, //departmentID == 1
 	};
 	
+	// xxx
+	// xox
+	public Position archCastleType = new Position(
+			new short[] {-1, -1, 0, 1, 1},
+			new short[] {0,  -1,-1, 0, -1});
+	
+	public Position[] castlePosition = new Position[] {
+		archCastleType,//departmentID == 0
+		archCastleType,//departmentID == 1
+	};
+
 	//mob
 	public MobParam[] mobParam = new MobParam[] {
 		//MobParam(int duration, int defense, int hp, String img)

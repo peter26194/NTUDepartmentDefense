@@ -58,6 +58,9 @@ public class Tower extends GameSprite{
 		this.towerID = towerID;
 		this.departmentID = departmentID;
 		
+		//relocate
+		ResourceManager.getInstance().moveBottomCenter(gridX * edgeUnit + edgeUnit/2, (gridY+1) * edgeUnit, this);
+		
 		//set parameters by Data Manager
 		this.range = DataManager.getInstance().towerParam[departmentID][towerID].getRange();
 		this.bulletType = DataManager.getInstance().towerParam[departmentID][towerID].getBullet();

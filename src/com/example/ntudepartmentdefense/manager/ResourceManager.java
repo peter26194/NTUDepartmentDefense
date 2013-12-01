@@ -23,6 +23,7 @@ import org.andengine.util.debug.Debug;
 
 
 import com.example.ntudepartmentdefense.MainActivity;
+import com.example.ntudepartmentdefense.gamesync.Tower;
 import com.example.ntudepartmentdefense.util.BulletParam;
 import com.example.ntudepartmentdefense.util.Gauge;
 import com.example.ntudepartmentdefense.util.MobParam;
@@ -520,6 +521,10 @@ public class ResourceManager extends Object {
 	public void moveCenter(float centerX, float centerY, Gauge gauge){
 		gauge.setPosition(centerX - gauge.getWidth()/2, 
 				centerY - gauge.getHeight()/2);
+	}
+	public void moveBottomCenter(float bottomCenterX, float bottomCenterY, Tower tower){
+		tower.setPosition(bottomCenterX - tower.getWidth()/2, 
+				bottomCenterY - tower.getHeight());
 	}
 	public float getCenterX(Sprite spt){
 		float centerX;
