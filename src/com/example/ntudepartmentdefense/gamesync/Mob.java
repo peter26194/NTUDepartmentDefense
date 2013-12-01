@@ -13,7 +13,6 @@ import com.example.ntudepartmentdefense.manager.ResourceManager;
 import com.example.ntudepartmentdefense.util.Gauge;
 
 
-
 public class Mob extends GameSprite{
 	private MobLayer mobLayer;
 	private static final float edgeLength = ResourceManager.getInstance().edgeLength;
@@ -148,16 +147,12 @@ public class Mob extends GameSprite{
 		super.onManagedUpdate(pSecondsElapsed);
 	}
 	@Override
-	public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-		if(pSceneTouchEvent.isActionDown()){
-			mobLayer.getGameSync().getGameScene().GameHud.getLeftWindow().getInfoWindow().displayInfoOf(this);
-		}
-		return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+	protected void displayInfo(){
+		mobLayer.getGameSync().getGameScene().GameHud.getLeftWindow().getInfoWindow().displayInfoOf(this);
 	}
 	public boolean isLive() {
 		return curHp > 0;
 	}
-	//PRIVATE METHODS
 	private short getDirection(){
 		return this.mobLayer.getGameSync().getDirection( gridX, gridY , ownedByServer);
 	}
