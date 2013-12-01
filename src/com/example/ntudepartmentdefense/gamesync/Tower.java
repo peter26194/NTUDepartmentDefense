@@ -185,7 +185,7 @@ public class Tower extends GameSprite{
 	
 	private void shoot(){
 		Bullet bullet = new Bullet(target, gridX[0] * edgeUnit + edgeUnit/2, gridY[0] * edgeUnit + edgeUnit/2, 
-				bulletType, ownedByServer, bulletLayer);
+				bulletType, isHost, bulletLayer);
 		bulletLayer.attachChild(bullet);
 		status = TOWER_RELOAD;
 		
