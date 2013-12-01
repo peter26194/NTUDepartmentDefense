@@ -107,27 +107,28 @@ public class PhotonClient extends LoadBalancingClient implements Runnable{
     }
     public boolean sendLoadingEvent( int progress ) {
     	 HashMap<Object, Object> eventContent = new HashMap<Object, Object>();
-         eventContent.put(KEY_PROGRESS, Integer.valueOf(progress).toString() );
+         eventContent.put(KEY_PROGRESS, ""+progress );
          return this.loadBalancingPeer.opRaiseEvent(PHOTON_MSG_LOADING, eventContent, false, CONTROL_CHANNEL);
     } 
     public boolean sendGameStartEvent( int updates ) {
     	HashMap<Object, Object> eventContent = new HashMap<Object, Object>();
-    	eventContent.put(KEY_UPDATES, Integer.valueOf(updates).toString() );
+    	eventContent.put(KEY_UPDATES, ""+updates );
     	return this.loadBalancingPeer.opRaiseEvent(PHOTON_MSG_START, eventContent, false, CONTROL_CHANNEL);
     }
     public boolean sendTurnDoneEvent( int turn ) {
     	HashMap<Object, Object> eventContent = new HashMap<Object, Object>();
-    	eventContent.put(KEY_TURN, Integer.valueOf(turn).toString() );
+    	eventContent.put(KEY_TURN, ""+turn );
     	return this.loadBalancingPeer.opRaiseEvent(PHOTON_MSG_TURN_DONE, eventContent, true, CMD_CHANNEL);
     }
     public boolean sendUpdatesEvent( int turn , int updates ) {
     	HashMap<Object, Object> eventContent = new HashMap<Object, Object>();
-    	eventContent.put(KEY_TURN, Integer.valueOf(turn).toString() );
-    	eventContent.put(KEY_UPDATES, Integer.valueOf(updates).toString() );
+    	eventContent.put(KEY_TURN, ""+turn );
+    	eventContent.put(KEY_UPDATES, ""+updates );
     	return this.loadBalancingPeer.opRaiseEvent(PHOTON_MSG_FRAME, eventContent, true, CMD_CHANNEL);
     }
     public boolean sendCmdEvent( int turn, Command cmd) {
     	HashMap<Object, Object> eventContent = new HashMap<Object, Object>();
+    	eventContent.put(KEY_TURN, ""+turn );
     	eventContent.put(KEY_CMD, cmd.toString() );
     	return this.loadBalancingPeer.opRaiseEvent(PHOTON_CMD, eventContent, true, CMD_CHANNEL);
     }
@@ -214,24 +215,24 @@ public class PhotonClient extends LoadBalancingClient implements Runnable{
             	NetworkManager.getInstance().onGameReject();
             	break;
             case PHOTON_MSG_LOADING:
-            	int progress = Integer.parseInt( eventData.Parameters.get(KEY_PROGRESS).toString() );
+            	int progress = Integer.parseInt( (String)eventData.Parameters.get(KEY_PROGRESS) );
             	NetworkManager.getInstance().onLoadingProgress( progress );
             	break;
             case PHOTON_MSG_START:
-            	updates = Integer.parseInt( eventData.Parameters.get(KEY_UPDATES).toString() );
+            	updates =Integer.parseInt( (String) eventData.Parameters.get(KEY_UPDATES) );
             	NetworkManager.getInstance().onGameStart( updates );
             	break;
             case PHOTON_MSG_TURN_DONE:
-            	turn = Integer.parseInt( eventData.Parameters.get(KEY_TURN).toString() );
+            	turn = Integer.parseInt( (String) eventData.Parameters.get(KEY_TURN) );
             	NetworkManager.getInstance().onTurnDone( turn );
             case PHOTON_MSG_FRAME:
-            	turn = Integer.parseInt( eventData.Parameters.get(KEY_TURN).toString() );
-            	updates = Integer.parseInt( eventData.Parameters.get(KEY_UPDATES).toString() );
+            	turn = Integer.parseInt( (String) eventData.Parameters.get(KEY_TURN) );
+            	updates = Integer.parseInt( (String) eventData.Parameters.get(KEY_UPDATES) );
             	NetworkManager.getInstance().onFrameNotice( turn , updates );
             	break;
             case PHOTON_CMD:
-            	turn = Integer.parseInt( eventData.Parameters.get(KEY_TURN).toString() );
-            	cmd = eventData.Parameters.get(KEY_CMD).toString();
+            	turn = Integer.parseInt( (String) eventData.Parameters.get(KEY_TURN));
+            	cmd = ((String)eventData.Parameters.get(KEY_CMD));
             	NetworkManager.getInstance().onReceiveCmd( turn , cmd );
             	break;
             case EventCode.GameList:

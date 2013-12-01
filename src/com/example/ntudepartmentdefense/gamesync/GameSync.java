@@ -122,7 +122,7 @@ public class GameSync extends Entity{
 		synchronized ( syncLock ) {
 			serverBase[0] = x;
 			serverBase[1] = y;
-			isMobOn[x][y] ++;
+
 			updateDirectionMap( serverBase , clientDirectionMap);
 		}
 	}
@@ -132,7 +132,6 @@ public class GameSync extends Entity{
 		synchronized ( syncLock ) {
 			clientBase[0] = x;
 			clientBase[1] = y;
-			isMobOn[x][y] ++;
 			updateDirectionMap( clientBase , serverDirectionMap);
 		}
 	}
@@ -470,8 +469,9 @@ public class GameSync extends Entity{
 						//blocks castle area except castle exit
 						this.blocksOrUnblocks(pos.x, pos.y, true);
 
-						//unblocks castle exit
+						//unblocks and locks castle exit
 						this.blocksOrUnblocks(new short[]{cmd.getX()}, new short[]{cmd.getY()}, false);
+						isMobOn[cmd.getX()][cmd.getY()] ++;
 					}
 				}
 				break;
