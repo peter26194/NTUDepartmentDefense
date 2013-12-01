@@ -225,7 +225,7 @@ public class GameSync extends Entity{
 			isMobOn[x][y] --;
 		}
 	}
-	public Mob createMob( boolean isServer , int typeID) {
+	public Mob createMob( boolean isServer , int typeID, int wave) {
 		// TODO
 		short[] base = ( isServer ) ? serverBase : clientBase;
 		synchronized ( syncLock ) {
@@ -233,7 +233,7 @@ public class GameSync extends Entity{
 			mobIDs.add(mobID);
 			MobLayer mlayer = (isServer) ? (MobLayer) hostTuple [ MOB_LAYER ]
 										 : (MobLayer) guestTuple[ MOB_LAYER ];
-			mobList[mobID] = new Mob( mobID , base[0] , base[1] , typeID , isServer , mlayer );
+			mobList[mobID] = new Mob( mobID , base[0] , base[1] , typeID , isServer , mlayer , wave);
 			return mobList[mobID];
 		}
 
@@ -538,7 +538,7 @@ public class GameSync extends Entity{
 	public Mob getFocusedMob() {
 		return focusedMob;
 	}
-	public void UnsetFocusedMob() {
+	public void unsetFocusedMob() {
 		focusedMob = null;
 	}
 
