@@ -445,6 +445,15 @@ public class GameSync extends Entity{
 				BulletLayer blayer= (isServer) ? (BulletLayer) hostTuple [ BULLET_LAYER ]
 						: (BulletLayer) guestTuple[ BULLET_LAYER ];
 				if (cmd.getID()!=0){
+					int tID = cmd.getID();
+					if ( GameManager.getInstance().getMoney() 
+							< DataManager.getInstance().towerParam[departmentID][tID].getBuildCost() ) {
+						break;
+					}
+					GameManager.getInstance()
+							   .minusMoney(DataManager.getInstance()
+									   		 		  .towerParam[departmentID][tID]
+									   		 		  .getBuildCost());
 					build( new Tower( cmd.getX() , cmd.getY()
 							,cmd.getID(), departmentID
 							,isServer

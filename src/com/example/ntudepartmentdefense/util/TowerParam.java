@@ -1,5 +1,7 @@
 package com.example.ntudepartmentdefense.util;
 
+import com.example.ntudepartmentdefense.manager.DataManager;
+
 public class TowerParam extends IconParam{
 	private float range;
 	private int bulletType;
@@ -7,9 +9,9 @@ public class TowerParam extends IconParam{
 	private int buildCD;
 	private int removeCD;
 	private int upperLevelTower;//-1 if no upper-level tower
-	private int levelUpCost;//-1 if no upper-level tower
+	private int buildCost;
 	
-	public TowerParam(float range, int bullet, int reloadCD, int bulidCD, int removeCD, int upperLevelTower, int levelUpCost, String img){
+	public TowerParam(float range, int bullet, int reloadCD, int bulidCD, int removeCD, int upperLevelTower, int buildCost, String img){
 		super(img);
 		
 		this.range = range;
@@ -19,7 +21,7 @@ public class TowerParam extends IconParam{
 		this.removeCD = removeCD;
 		
 		this.upperLevelTower = upperLevelTower;
-		this.levelUpCost = levelUpCost;
+		this.buildCost = buildCost;
 	}
 	
 	//getters
@@ -41,7 +43,7 @@ public class TowerParam extends IconParam{
 	public int getUpperLevelTower(){
 		return upperLevelTower;
 	}
-	public int getLevelUpCost(){
-		return levelUpCost;
+	public int getBuildCost() {
+		return buildCost;
 	}
 }
