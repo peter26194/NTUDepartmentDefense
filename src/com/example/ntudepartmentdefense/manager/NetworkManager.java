@@ -313,8 +313,10 @@ public class NetworkManager {
 		connection = IS_SINGLE;
 		// TEST ONLY
 		hostDepartmentID = 0;
+		guestDepartmentID = 0;
 		mapID = 0;
-		hostName = "single";
+		hostName = "player";
+		guestName = "computer";
 		return true;
 	}
 	
@@ -391,6 +393,22 @@ public class NetworkManager {
 	public void onGameStart( int updates ) {
 		frameMap.put(0, updates);
 		frameMap.put(1, updates);
+		
+		Queue<Command> q1 = new LinkedList<Command>();
+		short x = 4; //GameManager.getMapHostX( mapID );
+		short y = 4; //GameManager.getMapHostY( mapID );
+		Command c1 = obtainBuildCommand( (short)0 ,(short) x,(short) y );
+		q1.add(c1);
+		hostCmdMap.put(0, q1);
+		
+		q1 = new LinkedList<Command>();
+		x = 15; //GameManager.getMapGuestX( mapID );
+		y = 15; //GameManager.getMapGuestY( mapID );
+		c1 = obtainBuildCommand((short)0 ,(short) x,(short) y);
+		q1.add(c1);
+		guestCmdMap.put(0,q1);
+		
+		
 		gameStarted = true;
 		scene.onGameStart();
 	}

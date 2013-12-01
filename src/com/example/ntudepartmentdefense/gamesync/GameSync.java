@@ -125,8 +125,8 @@ public class GameSync extends Entity{
 		}
 	}
 	public void setClientBase(  short mapID ) {
-		short x = 12;//GameManager.getMapGuestX( mapID );
-		short y = 12;//GameManager.getMapGuestY( mapID );
+		short x = 15;//GameManager.getMapGuestX( mapID );
+		short y = 15;//GameManager.getMapGuestY( mapID );
 		synchronized ( syncLock ) {
 			clientBase[0] = x;
 			clientBase[1] = y;
@@ -135,7 +135,7 @@ public class GameSync extends Entity{
 		}
 	}
 
-	
+
 	// Tower Set-up
 	public boolean build( Tower tower, boolean isHost ) {
 		synchronized ( syncLock ) {
@@ -187,6 +187,8 @@ public class GameSync extends Entity{
 	}
 	public boolean canBuild( short[] x , short[] y){
 		// TODO
+		if ( x== null || y == null)
+			return true;
 		synchronized ( syncLock ) {
 			int count = x.length;
 			for ( int i = 0 ; i < count ; i++) {
