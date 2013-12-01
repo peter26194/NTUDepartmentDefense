@@ -500,20 +500,17 @@ public class GameSync extends Entity{
 			case Command.CMD_LEVEL_UP:
 				synchronized ( syncLock ) {
 					Tower upperLevelTower = towerMap[cmd.getY()][cmd.getX()].upperLevelTower();
-					int cost = DataManager.getInstance().towerParam[upperLevelTower.getDepartmentID()][upperLevelTower.getTowerID()].getUpperLevelTower();
 					
-					if ( GameManager.getInstance().getMoney() >= cost ){
-						towerMap[cmd.getY()][cmd.getX()].setVisible(false);
-						
-						ResourceManager.getInstance().context.runOnUpdateThread( new Runnable() {
-							@Override
-							public void run() {
-								GameSync.this.towerMap[cmd.getY()][cmd.getX()].detachSelf();
-							}
-						});
-						towerMap[cmd.getY()][cmd.getX()] = upperLevelTower;
-						GameManager.getInstance().minusMoney(cost);
-					}
+					towerMap[cmd.getY()][cmd.getX()].setVisible(false);
+					
+					
+					ResourceManager.getInstance().context.runOnUpdateThread( new Runnable() {
+						@Override
+						public void run() {
+							GameSync.this.towerMap[cmd.getY()][cmd.getX()].detachSelf();
+						}
+					});
+					towerMap[cmd.getY()][cmd.getX()] = upperLevelTower;
 				}
 				break;
 			case Command.CMD_FOCUS:
